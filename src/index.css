@@ -1,0 +1,390 @@
+@import "tailwindcss";
+
+
+/* =========================================================
+   TAILWIND v4 — @theme (CSS-first design tokens)
+   ========================================================= */
+@theme {
+  /* -------------------------------------------------------
+     COLOR SYSTEM — semantic brand tokens
+     ------------------------------------------------------- */
+
+  /* Brand Colors */
+  --color-brand-blue: #0768C1;
+  --color-brand-orange: #F59E0B;
+  --color-brand-dark: #222021;
+  --color-brand-black: #000000;
+  --color-brand-white: #FFFFFF;
+
+  /* Surface / Background */
+  --color-surface-light: #F5F5F5;
+
+  /* Border / Divider */
+  --color-border-light: #D8D8D8;
+
+  /* Text */
+  --color-text-muted: #6B7280;
+
+  /* Brand-derived hover / active states */
+  --color-brand-orange-hover: #D97706;
+  --color-brand-blue-hover: #055BA5;
+  --color-brand-dark-hover: #333233;
+
+  /* -------------------------------------------------------
+     TYPOGRAPHY — font families
+     ------------------------------------------------------- */
+  --font-heading: "Clash Display", "Poppins", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-clash: "Clash Display", "Poppins", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Poppins", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* -------------------------------------------------------
+     TYPOGRAPHY — responsive type scale
+     ------------------------------------------------------- */
+
+  /* H1: desktop 56px → mobile 36px */
+  --font-size-h1: clamp(2.25rem, 1.8rem + 2.2vw, 3.5rem);
+  --font-size-h1--line-height: 1.05;
+  --font-size-h1--letter-spacing: -0.02em;
+
+  /* H2: desktop 38px → mobile 28px */
+  --font-size-h2: clamp(1.75rem, 1.35rem + 1.7vw, 2.375rem);
+  --font-size-h2--line-height: 1.1;
+  --font-size-h2--letter-spacing: -0.015em;
+
+  /* H3: desktop 26px → mobile 22px */
+  --font-size-h3: clamp(1.375rem, 1.15rem + 0.9vw, 1.625rem);
+  --font-size-h3--line-height: 1.15;
+  --font-size-h3--letter-spacing: -0.01em;
+
+  /* Body Large: 18px */
+  --font-size-body-lg: 1.125rem;
+  --font-size-body-lg--line-height: 1.7;
+
+  /* Body: 16px */
+  --font-size-body: 1rem;
+  --font-size-body--line-height: 1.65;
+
+  /* Body Small: 14px */
+  --font-size-body-sm: 0.875rem;
+  --font-size-body-sm--line-height: 1.6;
+
+  /* Caption: 12px */
+  --font-size-caption: 0.75rem;
+  --font-size-caption--line-height: 1.5;
+}
+
+/* =========================================================
+   GLOBAL RESETS & BASE STYLES
+   ========================================================= */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: var(--font-size-body);
+    line-height: var(--font-size-body--line-height);
+    color: var(--color-brand-dark);
+    background-color: var(--color-brand-white);
+    font-weight: 400;
+  }
+
+  /* -------------------------------------------------------
+     HEADING DEFAULTS — Clash Display
+     ------------------------------------------------------- */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    color: var(--color-brand-dark);
+    margin: 0;
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  h1 {
+    font-size: var(--font-size-h1);
+    line-height: var(--font-size-h1--line-height);
+    letter-spacing: var(--font-size-h1--letter-spacing);
+  }
+
+  h2 {
+    font-size: var(--font-size-h2);
+    line-height: var(--font-size-h2--line-height);
+    letter-spacing: var(--font-size-h2--letter-spacing);
+  }
+
+  h3 {
+    font-size: var(--font-size-h3);
+    line-height: var(--font-size-h3--line-height);
+    letter-spacing: var(--font-size-h3--letter-spacing);
+  }
+
+  p {
+    margin: 0;
+    line-height: var(--font-size-body--line-height);
+  }
+
+  /* -------------------------------------------------------
+     LINK DEFAULTS
+     ------------------------------------------------------- */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* -------------------------------------------------------
+     IMAGE DEFAULTS
+     ------------------------------------------------------- */
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* -------------------------------------------------------
+     ACCESSIBLE FOCUS STATES
+     ------------------------------------------------------- */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-blue);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* -------------------------------------------------------
+     SELECTION STYLING
+     ------------------------------------------------------- */
+  ::selection {
+    background-color: var(--color-brand-blue);
+    color: var(--color-brand-white);
+  }
+}
+
+/* =========================================================
+   SEMANTIC DESIGN TOKENS — utility classes
+   ========================================================= */
+@layer utilities {
+  /* -------------------------------------------------------
+     BACKGROUND TOKENS
+     ------------------------------------------------------- */
+  .bg-primary {
+    background-color: var(--color-brand-blue);
+  }
+
+  .bg-secondary {
+    background-color: var(--color-surface-light);
+  }
+
+  .bg-dark {
+    background-color: var(--color-brand-dark);
+  }
+
+  .bg-accent {
+    background-color: var(--color-brand-orange);
+  }
+
+  /* -------------------------------------------------------
+     TEXT TOKENS
+     ------------------------------------------------------- */
+  .text-primary {
+    color: var(--color-brand-dark);
+  }
+
+  .text-secondary {
+    color: var(--color-text-muted);
+  }
+
+  .text-on-dark {
+    color: var(--color-brand-white);
+  }
+
+  .text-on-primary {
+    color: var(--color-brand-white);
+  }
+
+  .text-accent {
+    color: var(--color-brand-orange);
+  }
+
+  .text-brand {
+    color: var(--color-brand-blue);
+  }
+
+  /* -------------------------------------------------------
+     BORDER TOKENS
+     ------------------------------------------------------- */
+  .border-default {
+    border-color: var(--color-border-light);
+  }
+
+  /* -------------------------------------------------------
+     FONT TOKENS
+     ------------------------------------------------------- */
+  .font-display {
+    font-family: var(--font-heading);
+  }
+
+  .font-ui {
+    font-family: var(--font-body);
+  }
+}
+
+/* =========================================================
+   CTA / BUTTON DESIGN TOKENS
+   ========================================================= */
+@layer components {
+  /* -------------------------------------------------------
+     PRIMARY CTA — Orange accent
+     ------------------------------------------------------- */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    font-family: var(--font-body);
+    font-size: var(--font-size-body);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-brand-dark);
+    background-color: var(--color-brand-orange);
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-brand-orange-hover);
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--color-brand-orange);
+    outline-offset: 2px;
+  }
+
+  /* -------------------------------------------------------
+     DARK CTA
+     ------------------------------------------------------- */
+  .btn-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    font-family: var(--font-body);
+    font-size: var(--font-size-body);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-brand-white);
+    background-color: var(--color-brand-dark);
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-dark:hover {
+    background-color: var(--color-brand-dark-hover);
+    box-shadow: 0 4px 14px rgba(34, 32, 33, 0.35);
+  }
+
+  .btn-dark:active {
+    transform: scale(0.98);
+  }
+
+  .btn-dark:focus-visible {
+    outline: 2px solid var(--color-brand-dark);
+    outline-offset: 2px;
+  }
+
+  /* -------------------------------------------------------
+     BLUE CTA / UI BUTTON
+     ------------------------------------------------------- */
+  .btn-blue {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    font-family: var(--font-body);
+    font-size: var(--font-size-body);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-brand-white);
+    background-color: var(--color-brand-blue);
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-blue:hover {
+    background-color: var(--color-brand-blue-hover);
+    box-shadow: 0 4px 14px rgba(7, 104, 193, 0.35);
+  }
+
+  .btn-blue:active {
+    transform: scale(0.98);
+  }
+
+  .btn-blue:focus-visible {
+    outline: 2px solid var(--color-brand-blue);
+    outline-offset: 2px;
+  }
+
+  /* -------------------------------------------------------
+     OUTLINE / GHOST BUTTON
+     ------------------------------------------------------- */
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    font-family: var(--font-body);
+    font-size: var(--font-size-body);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-brand-dark);
+    background-color: transparent;
+    border: 2px solid var(--color-border-light);
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-brand-dark);
+    background-color: var(--color-surface-light);
+  }
+
+  .btn-outline:active {
+    transform: scale(0.98);
+  }
+
+  .btn-outline:focus-visible {
+    outline: 2px solid var(--color-brand-blue);
+    outline-offset: 2px;
+  }
+}

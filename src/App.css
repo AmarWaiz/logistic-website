@@ -1,0 +1,4075 @@
+/* =========================================================
+   LAYOUT SYSTEM
+   =========================================================
+   One container width and one gutter scale shared by every
+   section, so their left/right edges line up at every size.
+   The gutter steps down with the viewport; sections never set
+   their own horizontal padding.
+   ========================================================= */
+:root {
+  --layout-max: 1440px;
+  --gutter: 2.5rem;
+  /* One vertical rhythm: every section uses this for both its top
+     and bottom padding, so the gap between any two is identical. */
+  --section-space: clamp(2rem, 4vw, 3rem);
+}
+
+@media (max-width: 1200px) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --gutter: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --gutter: 1.25rem;
+  }
+}
+
+/* =========================================================
+   HEADER + HERO — Combined styles
+   =========================================================
+   The header and hero share a seamless blue background.
+   They are visually one continuous block.
+   ========================================================= */
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+/* Floating frosted bar — inset from the top and sides rather than
+   spanning the viewport, so the photo shows around all four edges.
+   The translucent fill is what makes backdrop-filter visible. */
+.header {
+  position: absolute;
+  top: 1rem;
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 50;
+  max-width: var(--layout-max);
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px) saturate(115%);
+  -webkit-backdrop-filter: blur(8px) saturate(115%);
+}
+
+/* --- Navigation layout: logo | links | CTA --- */
+.header__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --- Logo, hard left --- */
+.header__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header__logo-img {
+  height: 30px;
+  width: auto;
+  display: block;
+}
+
+/* --- Centred text links --- */
+.header__links {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__link {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  transition: color 0.25s ease;
+  white-space: nowrap;
+}
+
+.header__link:hover,
+.header__link--active {
+  color: var(--color-brand-white);
+}
+
+/* --- White pill CTA, hard right --- */
+.header__contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 40px;
+  padding: 0 1.375rem;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-brand-dark);
+  background-color: var(--color-brand-white);
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+}
+
+.header__contact:hover {
+  background-color: rgba(255, 255, 255, 0.88);
+  transform: translateY(-1px);
+}
+
+/* --- Hamburger (mobile) --- */
+.header__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 60;
+}
+
+.header__hamburger-line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--color-brand-white);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.header__hamburger-line--open:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.header__hamburger-line--open:nth-child(2) {
+  opacity: 0;
+}
+
+.header__hamburger-line--open:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* --- Mobile menu overlay --- */
+.header__mobile-menu {
+  display: none;
+}
+
+.header__mobile-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.header__mobile-link {
+  display: block;
+  padding: 0.875rem 1.5rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-brand-white);
+  text-decoration: none;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease;
+}
+
+.header__mobile-link:hover,
+.header__mobile-link--active {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.header__mobile-link--active {
+  font-weight: 600;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 0 0 28px 28px;
+  background-color: var(--color-brand-blue);
+}
+
+/* --- Cinematic scene ---
+   Background, wordmark, plane and truck are drawn onto one canvas
+   every frame (see Hero.tsx) rather than as separate DOM layers —
+   compositing them by hand keeps the four images pixel-registered
+   with each other at any size, and repaints on every scroll tick in
+   both directions since it's driven by ScrollTrigger's scrub value. */
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+}
+
+/* --- Content layer --- */
+.hero__content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 7rem 2rem 4rem;
+  max-width: 1040px;
+}
+
+/* --- Headline ---
+   Design spec: 73px / 68px line-height, single line.
+   `min()` scales it down on narrower viewports so the headline
+   always stays on ONE line instead of wrapping or clipping. */
+.hero__headline {
+  color: var(--color-brand-white);
+  margin-bottom: 1.25rem;
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: min(62px, 6vw);
+  line-height: 0.932; /* 68 / 73 */
+  letter-spacing: 0;
+  text-align: center;
+  white-space: nowrap;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Subtitle --- */
+.hero__subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: clamp(16px, 1.85vw, 25px);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 760px; /* wide enough to break onto 2 lines, not 3 */
+  margin-bottom: clamp(1.5rem, 3vw, 2rem);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- CTA group --- */
+.hero__cta-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* --- CTA base --- */
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  /* Equal-width pills: the floor is wide enough that both labels
+     land on the same width, so the pair reads as a set. */
+  min-width: 156px;
+  height: 48px;
+  padding: 0 1.125rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 9999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+/* --- CTA icon --- */
+.hero__cta-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Primary CTA: orange */
+.hero__cta--primary {
+  background-color: var(--color-brand-orange);
+  color: var(--color-brand-dark);
+  border: 2px solid var(--color-brand-orange);
+}
+
+.hero__cta--primary:hover {
+  background-color: var(--color-brand-orange-hover);
+  border-color: var(--color-brand-orange-hover);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Secondary CTA: white outline */
+.hero__cta--outline {
+  background: transparent;
+  color: var(--color-brand-white);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.hero__cta--outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   PROCESS — "How it works" 4-step flow
+   ========================================================= */
+.process {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter) 0;
+}
+
+.process__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+/* --- Section heading (spec: 50px / 58px) --- */
+.process__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 3.7vw, 42px);
+  line-height: 1.16; /* 58 / 50 */
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.25rem;
+}
+
+/* --- Section description (spec: 20px / 26px) --- */
+.process__subtitle {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.3; /* 26 / 20 */
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-black);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* --- Steps row ---
+   Capped narrower than the container so the connectors between
+   badges stay a sensible length on wide screens. */
+.process__steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0 1.5rem;
+  list-style: none;
+  max-width: 1200px;
+  margin: clamp(2.5rem, 5vw, 4.5rem) auto 0;
+  padding: 0;
+}
+
+.process__step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* --- Dashed connector + arrowhead between badges ---
+   Each column is an equal fraction, so the next badge sits exactly
+   100% of a column to the right: the line runs from this badge's
+   edge to the next badge's edge. */
+.process__step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 36px; /* vertical centre of the 72px badge */
+  left: calc(50% + 48px);
+  right: calc(-50% + 52px);
+  border-top: 2px dashed var(--color-border-light);
+}
+
+/* Chevron tip: a square with two borders, rotated 45° — keeps the
+   same 2px stroke weight as the dashed line it terminates. */
+.process__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 36px;
+  right: calc(-50% + 44px);
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-top: 2px solid var(--color-border-light);
+  border-right: 2px solid var(--color-border-light);
+  transform: rotate(45deg);
+}
+
+/* --- Numbered badge --- */
+.process__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px dashed var(--color-border-light);
+  background: var(--color-brand-white);
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.5rem;
+}
+
+/* Highlighted step: solid orange fill */
+.process__badge--accent {
+  border-color: var(--color-brand-orange);
+  border-style: solid;
+  background: var(--color-brand-orange);
+  color: var(--color-brand-white);
+}
+
+/* --- Step copy --- */
+.process__step-title {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: var(--color-brand-dark);
+  margin-bottom: 0.5rem;
+}
+
+.process__step-desc {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  max-width: 260px;
+}
+
+/* =========================================================
+   SYSTEMS — "We Build Logistics Systems" mode cards
+   ========================================================= */
+.systems {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter) 0;
+}
+
+.systems__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+/* Title left, description right */
+/* The description column is given a little extra width so the copy
+   breaks onto 2 lines rather than 3. */
+.systems__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: 1.5rem 3rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.systems__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 3.7vw, 42px);
+  line-height: 1.16; /* 58 / 50 */
+  letter-spacing: 0;
+  text-align: left;
+  color: var(--color-brand-dark);
+}
+
+.systems__subtitle {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.3; /* 26 / 20 */
+  letter-spacing: 0;
+  color: var(--color-brand-black);
+  max-width: 720px;
+}
+
+/* --- Mode cards --- */
+.systems__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 4:3 is the PNGs' native ratio — no crop, so the cards stand at
+   full height and nothing is trimmed off the subject or the caption.
+   Fixing the ratio keeps the row even if an image is ever swapped. */
+.systems__img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
+}
+
+/* Carousel dots — only surfaced at carousel widths (see ≤768px) */
+.systems__dots {
+  display: none;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.systems__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-border-light);
+  cursor: pointer;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.systems__dot--active {
+  width: 22px;
+  border-radius: 9999px;
+  background: var(--color-brand-orange);
+}
+
+/* =========================================================
+   GROWTH — image + orange feature panel
+   ========================================================= */
+.growth {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter) 0;
+}
+
+.growth__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  gap: 1.5rem;
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+/* --- Left: photo, cropped to match the panel's height --- */
+.growth__media {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.growth__img {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* --- Right: orange panel --- */
+.growth__panel {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-brand-orange);
+  border-radius: 16px;
+  padding: clamp(1.75rem, 3vw, 2.75rem);
+}
+
+/* Capped narrower than the panel so the headline sets on 3 lines
+   rather than stretching across 2. */
+.growth__title {
+  font-family: var(--font-clash);
+  font-style: normal;
+  font-weight: 600;
+  font-size: clamp(19px, 2vw, 30px);
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: var(--color-brand-black);
+  max-width: 410px;
+  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* --- "Get Started" row, with the rule beneath it --- */
+.growth__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: clamp(1rem, 2vw, 1.5rem);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.3vw, 17px);
+  font-weight: 600;
+  color: var(--color-brand-black);
+  text-decoration: none;
+}
+
+.growth__cta-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+  transition: transform 0.25s ease;
+}
+
+.growth__cta-badge svg {
+  width: 18px;
+  height: 18px;
+}
+
+.growth__cta:hover .growth__cta-badge {
+  transform: translate(2px, -2px);
+}
+
+/* --- 2 x 2 feature grid --- */
+.growth__features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.25rem) 1.5rem;
+  list-style: none;
+  margin: clamp(1.5rem, 3vw, 2.25rem) 0 0;
+  padding: 0;
+}
+
+.growth__feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 0.875rem;
+  border-radius: 50%;
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+}
+
+.growth__feature-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.growth__feature-title {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: clamp(14px, 1.15vw, 15px);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: var(--color-brand-black);
+  margin-bottom: 0.375rem;
+}
+
+.growth__feature-desc {
+  font-family: var(--font-body);
+  font-size: clamp(11px, 0.95vw, 12px);
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+/* =========================================================
+   ASSURANCE — two cards flanking a tall image
+   ========================================================= */
+/* Closes with bottom space too — the centre image runs taller than
+   the cards, so without it the section ends right on the photo */
+.assurance {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.assurance__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.assurance__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 3.7vw, 42px);
+  line-height: 1.16; /* 58 / 50 */
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.25rem;
+}
+
+.assurance__subtitle {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.3; /* 26 / 20 */
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-black);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* The image sets the row height; the cards centre against it.
+   Held narrower than the full container so the card copy wraps to a
+   decent depth instead of running out into short, wide lines. */
+.assurance__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 1080px;
+  margin: clamp(2rem, 4vw, 3rem) auto 0;
+}
+
+/* Deeper vertical padding than horizontal, to stand the cards up
+   closer to the image's height without stretching them to match it */
+.assurance__card {
+  background-color: var(--color-surface-light);
+  border-radius: 16px;
+  padding: clamp(2rem, 3.4vw, 2.75rem) clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.assurance__card-title {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 600;
+  line-height: 1.136; /* 25 / 22 */
+  letter-spacing: 0;
+  color: var(--color-brand-dark);
+  margin-bottom: 1rem;
+}
+
+.assurance__card-text {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 400;
+  line-height: 1.5625; /* 25 / 16 */
+  color: var(--color-text-muted);
+}
+
+/* A shallow crop of the source's native 5:7, so the image stands
+   clearly taller than the cards — tied to the card type size above,
+   so revisit this ratio if that copy grows or shrinks. */
+.assurance__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 16px;
+}
+
+/* =========================================================
+   SERVICES — scroll-pinned sequence, one service at a time
+   =========================================================
+   The track is taller than the viewport; the panel inside pins to
+   the top and swaps content as you scroll past it. Below 769px the
+   pin is dropped and the services simply stack (see that block).
+   ========================================================= */
+.services {
+  background-color: var(--color-brand-white);
+}
+
+/* Scroll distance per service. Shorter than a full viewport each,
+   so stepping through all four doesn't feel like a long hold. */
+.services__track {
+  position: relative;
+  height: calc(var(--service-count, 4) * 70vh);
+}
+
+/* Panel padding uses the section token, so the space it leaves
+   above and below matches every other section's gap */
+.services__sticky {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--section-space) var(--gutter);
+}
+
+.services__inner {
+  width: 100%;
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+/* --- Header: title left, description right, rule beneath --- */
+.services__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: 1.5rem 3rem;
+  padding-bottom: clamp(1rem, 2vw, 1.5rem);
+  border-bottom: 2px solid rgba(34, 32, 33, 0.25);
+}
+
+.services__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 3.7vw, 42px);
+  line-height: 1.16;
+  letter-spacing: 0;
+  color: var(--color-brand-dark);
+}
+
+.services__subtitle {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: var(--color-brand-black);
+  max-width: 620px;
+}
+
+/* --- Stage: all services occupy the same grid cell, so the
+       panel keeps one height and they cross-fade in place --- */
+.services__stage {
+  display: grid;
+  margin-top: clamp(1.75rem, 3.5vw, 3rem);
+}
+
+.services__item {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: start; /* copy sits level with the top of the image */
+  gap: clamp(1.25rem, 2.5vw, 2.5rem);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  transition: opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), visibility 0.6s;
+  will-change: opacity, transform;
+}
+
+.services__item--active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.services__item-title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(18px, 1.7vw, 22px);
+  line-height: 1.25;
+  letter-spacing: 0;
+  color: var(--color-brand-dark);
+  margin-bottom: 1rem;
+}
+
+.services__num {
+  margin-right: 0.625rem;
+}
+
+/* No cap — the grid column already holds it to a sane measure, and
+   capping it narrower just opened a gap before the image */
+.services__text {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.services__text + .services__text {
+  margin-top: 0.875rem;
+}
+
+.services__img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services__item {
+    transition-duration: 0.01ms;
+    transform: none;
+  }
+}
+
+/* =========================================================
+   NETWORK — CTA over a world-map backdrop
+   ========================================================= */
+/* Deep padding so the section stands tall enough to show most of
+   the map's height once it's scaled to the full width */
+/* Taller than the other sections so more of the map reads behind
+   the copy, with extra clearance above it. Height comes from
+   min-height rather than bottom padding, so the spacing below
+   still belongs to the next section. */
+.network {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 460px;
+  background-color: var(--color-brand-white);
+  padding: calc(var(--section-space) * 2) var(--gutter) 0;
+  overflow: hidden;
+}
+
+/* Decorative backdrop, so it lives in CSS rather than the DOM.
+   Held back with opacity so the copy stays the focus. */
+.network::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('./assets/images/map.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% auto; /* full width; crops top/bottom evenly */
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.network__inner {
+  position: relative; /* above the map */
+  width: 100%;
+  max-width: var(--layout-max);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.network__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 3.7vw, 42px);
+  line-height: 1.16; /* 58 / 50 */
+  letter-spacing: 0;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.25rem;
+}
+
+.network__subtitle {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.3; /* 26 / 20 */
+  letter-spacing: 0;
+  color: var(--color-brand-black);
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.network__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 156px;
+  height: 48px;
+  padding: 0 1.5rem;
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-brand-dark);
+  background-color: var(--color-brand-orange);
+  border: 2px solid var(--color-brand-orange);
+  border-radius: 9999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.network__cta:hover {
+  background-color: var(--color-brand-orange-hover);
+  border-color: var(--color-brand-orange-hover);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   REVIEWS — testimonial carousel, three cards per view
+   ========================================================= */
+/* No top padding — the pinned Services section above already
+   leaves clearance at the end of its scroll */
+.reviews {
+  background-color: var(--color-brand-white);
+  padding: 0 var(--gutter);
+}
+
+.reviews__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.reviews__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 3.7vw, 42px);
+  line-height: 1.16;
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.25rem;
+}
+
+.reviews__subtitle {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-black);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* --- Track: four cards per view, snapping and looping --- */
+.reviews__track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 3 * 1.5rem) / 4);
+  gap: 1.5rem;
+  list-style: none;
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  padding: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.reviews__track::-webkit-scrollbar {
+  display: none;
+}
+
+.reviews__card {
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface-light);
+  border-radius: 14px;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.reviews__card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.125rem;
+}
+
+.reviews__quote {
+  width: 38px;
+  height: 29px;
+  flex-shrink: 0;
+  color: rgba(7, 104, 193, 0.25);
+}
+
+.reviews__stars {
+  display: inline-flex;
+  gap: 3px;
+  color: var(--color-brand-orange);
+}
+
+.reviews__stars svg {
+  width: 19px;
+  height: 19px;
+}
+
+.reviews__quote-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.5rem;
+}
+
+/* --- Reviewer --- */
+.reviews__person {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: auto; /* pins the byline to the bottom of every card */
+}
+
+.reviews__avatar {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.reviews__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reviews__name {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-brand-dark);
+}
+
+.reviews__role {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+/* --- Dots --- */
+.reviews__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.reviews__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-border-light);
+  cursor: pointer;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.reviews__dot--active {
+  width: 22px;
+  border-radius: 9999px;
+  background: var(--color-brand-orange);
+}
+
+/* =========================================================
+   BLOG — three post cards
+   ========================================================= */
+.blog {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter) 0;
+}
+
+.blog__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.blog__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 3.7vw, 42px);
+  line-height: 1.16;
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.25rem;
+}
+
+.blog__subtitle {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-black);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.blog__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  list-style: none;
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  padding: 0;
+}
+
+.blog__card {
+  display: flex;
+  flex-direction: column;
+}
+
+.blog__img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+}
+
+.blog__link {
+  align-self: flex-start;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-brand-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.blog__link:hover {
+  color: var(--color-brand-blue);
+}
+
+.blog__card-title {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: var(--color-brand-dark);
+  margin-bottom: 0.75rem;
+}
+
+.blog__excerpt {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.25rem;
+}
+
+.blog__meta {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  margin-top: auto; /* keeps the byline on the baseline across cards */
+}
+
+/* =========================================================
+   FAQ — accordion
+   ========================================================= */
+.faq {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.faq__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.faq__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 3.7vw, 42px);
+  line-height: 1.16;
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.25rem;
+}
+
+.faq__subtitle {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--color-brand-black);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.faq__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  padding: 0;
+}
+
+/* Lifted on a soft shadow alone — no outline */
+.faq__item {
+  background-color: var(--color-brand-white);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  transition: box-shadow 0.25s ease;
+}
+
+.faq__item--open {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+}
+
+.faq__question {
+  margin: 0;
+}
+
+/* The whole header row is the control */
+.faq__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  padding: clamp(1rem, 1.8vw, 1.375rem) clamp(1rem, 2vw, 1.75rem);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-clash);
+  font-style: normal;
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 600;
+  line-height: 1.5; /* 30 / 20 */
+  letter-spacing: 0;
+  color: var(--color-brand-dark);
+}
+
+.faq__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+}
+
+.faq__toggle svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s ease;
+}
+
+/* The plus rotates into a cross when the item opens */
+.faq__item--open .faq__toggle svg {
+  transform: rotate(45deg);
+}
+
+/* 0fr → 1fr animates the panel open without measuring its height */
+.faq__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.faq__item--open .faq__panel {
+  grid-template-rows: 1fr;
+}
+
+.faq__panel-inner {
+  overflow: hidden;
+}
+
+.faq__answer {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.05vw, 14px);
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--color-text-muted);
+  padding: 0 clamp(1rem, 2vw, 1.75rem) clamp(1rem, 1.8vw, 1.375rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__panel,
+  .faq__toggle svg {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* =========================================================
+   PROMO — closing CTA banner over a photo
+   ========================================================= */
+/* Last section before the footer, so it closes with bottom space too */
+.promo {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.promo__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+/* Held well inside the container rather than running the full width */
+.promo__card {
+  position: relative;
+  max-width: 940px;
+  margin: 0 auto;
+  border-radius: 18px;
+  overflow: hidden;
+  padding: clamp(2.75rem, 6.5vw, 5rem) clamp(1.25rem, 4vw, 3rem);
+  text-align: center;
+  isolation: isolate;
+}
+
+/* Photo, then a scrim over it — both decorative, so neither is
+   in the DOM. The scrim is what keeps the white copy legible. */
+.promo__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: url('./assets/images/LogisticsDoes.webp');
+  background-size: cover;
+  background-position: center 42%;
+}
+
+/* Centre-weighted scrim: heavy enough behind the copy to keep it
+   legible, lighter at the edges so the photo still reads */
+.promo__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(
+      ellipse 65% 85% at 50% 50%,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0) 75%
+    ),
+    rgba(0, 0, 0, 0.45);
+}
+
+/* Wide enough to keep the heading on one line */
+.promo__content {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.promo__title {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: clamp(20px, 2.1vw, 28px);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: var(--color-brand-white);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+  margin-bottom: 0.875rem;
+}
+
+/* Narrower than the heading, so it breaks onto two lines */
+.promo__text {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.15vw, 15px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+  max-width: 420px;
+  margin: 0 auto clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.promo__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  height: 44px;
+  padding: 0 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-brand-dark);
+  background-color: var(--color-brand-orange);
+  border-radius: 9999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.promo__cta:hover {
+  background-color: var(--color-brand-orange-hover);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.footer {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  min-height: 550px;
+  background-color: #1e1d1e;
+  padding: clamp(2.5rem, 5vw, 4rem) var(--gutter) clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* Oversized wordmark bleeding off the bottom-right corner.
+   footerlogo.png already carries its faded alpha, so no CSS
+   opacity here — layering one on top erases it. */
+.footer__watermark {
+  position: absolute;
+  right: -1%;
+  bottom: -9%;
+  width: min(50%, 700px);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Column layout so the copyright sits on the footer's floor
+   however much taller than its content the 550px makes it */
+.footer__inner {
+  position: relative; /* above the watermark */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr 1fr 0.9fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* --- Brand block --- */
+.footer__logo {
+  width: 182px;
+  height: 58px;
+  object-fit: contain;
+  object-position: left center;
+  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.footer__tagline {
+  font-family: var(--font-body);
+  font-size: clamp(22px, 2.4vw, 32px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--color-brand-white);
+  margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.footer__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 40px;
+  padding: 0 1.125rem;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-brand-dark);
+  background-color: var(--color-brand-white);
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.footer__cta svg {
+  width: 15px;
+  height: 15px;
+}
+
+.footer__cta:hover {
+  background-color: rgba(255, 255, 255, 0.88);
+  transform: translateY(-1px);
+}
+
+/* --- Link columns --- */
+.footer__col-title {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.333; /* 24 / 18 */
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 1.25rem;
+}
+
+.footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer__link {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5; /* 24 / 16 */
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer__link:hover {
+  color: var(--color-brand-orange);
+}
+
+.footer__address {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5; /* 24 / 16 */
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 220px;
+}
+
+/* --- Social + back to top --- */
+.footer__col--social {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.footer__social {
+  display: flex;
+  gap: 1.125rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-brand-white);
+  transition: color 0.2s ease;
+}
+
+.footer__social-link svg {
+  width: 24px;
+  height: 24px;
+}
+
+.footer__social-link:hover {
+  color: var(--color-brand-orange);
+}
+
+.footer__top {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-top: clamp(3.5rem, 9vw, 7rem);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-brand-white);
+  cursor: pointer;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.footer__top svg {
+  width: 17px;
+  height: 17px;
+}
+
+.footer__top:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.footer__copyright {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: auto; /* pinned to the floor of the 550px footer */
+  padding-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+/* =========================================================
+   ABOUT — hero over the highway photo
+   ========================================================= */
+.abouthero {
+  position: relative;
+  display: flex;
+  align-items: flex-end; /* card sits on the floor of the hero */
+  min-height: min(760px, 88vh);
+  padding: 8rem var(--gutter) clamp(2rem, 4vw, 3rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.abouthero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: url('./assets/images/aboutbg.webp');
+  background-size: cover;
+  background-position: center 35%;
+}
+
+/* Services page uses its own hero photo instead of the shared one. */
+.abouthero--services::before {
+  background-image: url('./assets/images/servicesmain.jpg');
+  background-position: center 40%;
+}
+
+/* Contact page uses its own hero photo instead of the shared one. */
+.abouthero--contact::before {
+  background-image: url('./assets/images/contact.jpg');
+  background-position: center 45%;
+}
+
+/* Light overall wash only — the glass card below carries the
+   contrast for the copy, so the photo stays open around it */
+.abouthero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(16, 14, 15, 0.3) 0%,
+    rgba(16, 14, 15, 0.18) 45%,
+    rgba(16, 14, 15, 0.42) 100%
+  );
+}
+
+.abouthero__inner {
+  width: 100%;
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+/* --- Frosted card holding the copy --- */
+.abouthero__card {
+  max-width: 640px;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
+  background: rgba(18, 16, 17, 0.5);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+}
+
+.abouthero__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(26px, 3.9vw, 47px);
+  line-height: 1.12;
+  letter-spacing: 0;
+  color: var(--color-brand-white);
+  margin-bottom: 1.125rem;
+}
+
+.abouthero__text {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1.3vw, 17px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 560px;
+  margin-bottom: clamp(1.5rem, 3vw, 2rem);
+}
+
+.abouthero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  height: 46px;
+  padding: 0 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-brand-dark);
+  background-color: var(--color-brand-white);
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.abouthero__cta:hover {
+  background-color: rgba(255, 255, 255, 0.88);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   BRANDS — logo strip
+   ========================================================= */
+.brands {
+  background-color: var(--color-brand-white);
+  padding: clamp(1rem, 2vw, 1.5rem) var(--gutter) 0;
+}
+
+.brands__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+/* Fades the logos out at each edge instead of hard-clipping them
+   mid-scroll */
+.brands__marquee {
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+/* Two identical groups side by side; animating exactly -50% moves
+   one full group's width, so the loop has no seam or jump */
+.brands__track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: brands-scroll 30s linear infinite;
+}
+
+.brands__marquee:hover .brands__track {
+  animation-play-state: paused;
+}
+
+.brands__group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 3.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0 1.75rem;
+}
+
+.brands__item {
+  flex-shrink: 0;
+}
+
+/* Sized by width: the source has generous whitespace baked in, so
+   constraining its height leaves the wordmark itself tiny */
+.brands__logo {
+  width: clamp(92px, 9vw, 124px);
+  height: auto;
+  opacity: 0.55;
+  transition: opacity 0.25s ease;
+}
+
+.brands__item:hover .brands__logo {
+  opacity: 1;
+}
+
+@keyframes brands-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brands__track {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   SEAMLESS — copy beside a 2 x 2 image grid
+   ========================================================= */
+.seamless {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.seamless__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.seamless__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 3.4vw, 39px);
+  line-height: 1.15;
+  letter-spacing: 0;
+  color: var(--color-brand-dark);
+  max-width: 460px;
+  margin-bottom: 1.25rem;
+}
+
+.seamless__text {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  max-width: 520px;
+}
+
+.seamless__text + .seamless__text {
+  margin-top: 0.875rem;
+}
+
+.seamless__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  height: 46px;
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  padding: 0 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-brand-dark);
+  background-color: var(--color-brand-orange);
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.seamless__cta:hover {
+  background-color: var(--color-brand-orange-hover);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+
+.seamless__grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+  height: clamp(360px, 34vw, 520px);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.seamless__tile {
+  min-height: 0;
+}
+
+.seamless__tile--large {
+  grid-row: 1 / span 2;
+}
+
+.seamless__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
+}
+
+/* =========================================================
+   IMPACT — dark card: copy + portrait, stat strip below
+   ========================================================= */
+.impact {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.impact__card {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+  background-color: var(--color-brand-dark);
+  border-radius: 24px;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.impact__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: center;
+}
+
+.impact__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.2;
+  color: var(--color-brand-white);
+  margin-bottom: 1.25rem;
+  max-width: 460px;
+}
+
+.impact__text {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.05vw, 14px);
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 480px;
+}
+
+.impact__text + .impact__text {
+  margin-top: 0.875rem;
+}
+
+.impact__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  height: 46px;
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  padding: 0 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-brand-white);
+  background-color: var(--color-brand-orange);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.impact__cta:hover {
+  background-color: var(--color-brand-orange-hover);
+}
+
+.impact__cta:active {
+  transform: scale(0.98);
+}
+
+.impact__img {
+  width: 100%;
+  height: clamp(220px, 24vw, 320px);
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 16px;
+  filter: grayscale(1) contrast(1.05);
+}
+
+.impact__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  list-style: none;
+  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+  padding: 0;
+}
+
+.impact__stat {
+  padding: 1.5rem 1.375rem;
+  border-radius: 14px;
+}
+
+.impact__stat-value {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 2.4vw, 2.25rem);
+  color: var(--color-brand-dark);
+  margin-bottom: 0.375rem;
+}
+
+.impact__stat-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.impact__stat--gold {
+  background-color: #f2c14e;
+}
+
+.impact__stat--white {
+  background-color: var(--color-brand-white);
+}
+
+.impact__stat--teal {
+  background-color: #2fe3b4;
+}
+
+/* =========================================================
+   ROAD BANNER — single wide photo, no copy
+   ========================================================= */
+.road-banner {
+  background-color: var(--color-brand-white);
+  padding: 0 var(--gutter) var(--section-space);
+}
+
+.road-banner__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.road-banner__media {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.road-banner__img {
+  width: 100%;
+  height: clamp(280px, 42vw, 520px);
+  object-fit: cover;
+  object-position: center 45%;
+  border-radius: 18px;
+}
+
+/* Soft vignette centred on the button so it reads clearly no
+   matter which part of the photo sits behind it */
+.road-banner__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(10, 9, 10, 0.4) 0%,
+    rgba(10, 9, 10, 0.16) 30%,
+    rgba(10, 9, 10, 0) 55%
+  );
+  pointer-events: none;
+}
+
+/* Centered play button — solid white disc with real elevation,
+   plus a slow double sonar ring for a clear "play me" cue */
+.road-banner__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(72px, 6.5vw, 92px);
+  height: clamp(72px, 6.5vw, 92px);
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-brand-white);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.38), 0 2px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.road-banner__play-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  animation: road-banner-sonar 2.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.road-banner__play-ring:nth-child(2) {
+  animation-delay: 1.4s;
+}
+
+.road-banner__play:hover {
+  transform: translate(-50%, -50%) scale(1.07);
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.42), 0 2px 10px rgba(0, 0, 0, 0.22);
+}
+
+.road-banner__play:focus-visible {
+  outline: 2px solid var(--color-brand-white);
+  outline-offset: 4px;
+}
+
+.road-banner__play svg {
+  width: 36%;
+  height: 36%;
+  color: var(--color-brand-dark);
+  margin-left: 3px;
+}
+
+@keyframes road-banner-sonar {
+  from {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+  to {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .road-banner__play-ring {
+    display: none;
+  }
+}
+
+/* =========================================================
+   PLATFORM — network heading, then image beside an accordion
+   (accordion re-uses the .faq__* item/trigger/panel styles)
+   ========================================================= */
+.platform {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.platform__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.platform__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.platform__img {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  object-fit: cover;
+  object-position: center 35%;
+  border-radius: 16px;
+}
+
+.platform__heading {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.2;
+  color: var(--color-brand-dark);
+  margin-bottom: 0.875rem;
+}
+
+.platform__text {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+
+/* =========================================================
+   WHY CHOOSE — dark card, heading tile + 5 service tiles
+   ========================================================= */
+.why-choose {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.why-choose__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.why-choose__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(280px, 1fr);
+  gap: 1rem;
+  background-color: var(--color-brand-dark);
+  border-radius: 24px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.why-choose__intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.why-choose__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.15;
+  color: var(--color-brand-white);
+  margin-bottom: 0.875rem;
+}
+
+.why-choose__subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.05vw, 14px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.why-choose__card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.why-choose__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.why-choose__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.32) 32%,
+    rgba(0, 0, 0, 0) 55%
+  );
+}
+
+.why-choose__copy {
+  position: absolute;
+  left: 1.125rem;
+  right: 1.125rem;
+  top: 1.125rem;
+}
+
+.why-choose__label {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(15px, 1.3vw, 17px);
+  color: var(--color-brand-white);
+  margin-bottom: 0.3rem;
+}
+
+.why-choose__text {
+  font-family: var(--font-body);
+  font-size: clamp(11.5px, 0.95vw, 12.5px);
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.why-choose__arrow {
+  position: absolute;
+  left: 1.125rem;
+  bottom: 1.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-brand-white);
+  color: var(--color-brand-dark);
+}
+
+.why-choose__arrow svg {
+  width: 46%;
+  height: 46%;
+}
+
+/* =========================================================
+   CAPABILITIES — card row, active one lit orange on
+   hover / focus / click, default resting card set in JS
+   ========================================================= */
+.capabilities {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.capabilities__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.capabilities__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  list-style: none;
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  padding: 0;
+}
+
+.capabilities__card {
+  padding: clamp(1.5rem, 2.2vw, 1.875rem) clamp(1.25rem, 2vw, 1.625rem);
+  border-radius: 10px;
+  background-color: var(--color-surface-light);
+  cursor: pointer;
+  transition: background-color 0.35s ease;
+}
+
+.capabilities__card:focus-visible {
+  outline: 2px solid var(--color-brand-blue);
+  outline-offset: 3px;
+}
+
+.capabilities__card--active {
+  background-color: var(--color-brand-orange);
+}
+
+.capabilities__number {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2vw, 1.875rem);
+  color: rgba(0, 0, 0, 0.15);
+  margin-bottom: 1.25rem;
+  transition: color 0.35s ease;
+}
+
+.capabilities__card--active .capabilities__number {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.capabilities__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.25;
+  color: var(--color-brand-dark);
+  margin-bottom: 0.75rem;
+  transition: color 0.35s ease;
+}
+
+.capabilities__text {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.05vw, 14px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+  transition: color 0.35s ease;
+}
+
+.capabilities__card--active .capabilities__title,
+.capabilities__card--active .capabilities__text {
+  color: var(--color-brand-white);
+}
+
+.capabilities__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-brand-dark);
+  text-decoration: none;
+  transition: color 0.35s ease;
+}
+
+.capabilities__link svg {
+  width: 15px;
+  height: 15px;
+}
+
+.capabilities__card--active .capabilities__link {
+  color: var(--color-brand-white);
+}
+
+/* =========================================================
+   HOW IT WORKS — dark card, step rows either side of a photo
+   that swaps to match whichever step is active
+   ========================================================= */
+.how-it-works {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.how-it-works__card {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+  background-color: var(--color-brand-dark);
+  border-radius: 24px;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.how-it-works__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(24px, 2.8vw, 32px);
+  color: var(--color-brand-white);
+  margin-bottom: 0.5rem;
+}
+
+.how-it-works__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.how-it-works__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: 1rem 2rem;
+  padding: 1.125rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.how-it-works__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.how-it-works__number {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.2s ease;
+}
+
+.how-it-works__row-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(15px, 1.3vw, 17px);
+  color: var(--color-brand-white);
+}
+
+.how-it-works__dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--color-brand-orange);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.how-it-works__row--active .how-it-works__dot {
+  opacity: 1;
+}
+
+.how-it-works__row--active .how-it-works__number {
+  color: var(--color-brand-orange);
+}
+
+.how-it-works__row-text {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-brand-white);
+  padding-top: 0.1875rem;
+}
+
+.how-it-works__img {
+  display: block;
+  width: 100%;
+  height: clamp(220px, 26vw, 320px);
+  object-fit: cover;
+  border-radius: 14px;
+  margin: clamp(1.5rem, 3vw, 2rem) 0;
+}
+
+/* =========================================================
+   INDUSTRY FIT — 4 stat tiles, then copy beside a photo
+   ========================================================= */
+.industry-fit {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.industry-fit__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.industry-fit__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  list-style: none;
+  margin: 0 0 clamp(2.5rem, 5vw, 3.5rem);
+  padding: 0;
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.industry-fit__stat {
+  padding: 1.25rem 1.5rem;
+  border-left: 1px solid var(--color-border-light);
+}
+
+.industry-fit__stat:first-child {
+  border-left: none;
+}
+
+.industry-fit__stat-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 0.625rem;
+}
+
+.industry-fit__stat-value {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  color: var(--color-brand-dark);
+}
+
+.industry-fit__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.industry-fit__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(24px, 2.8vw, 34px);
+  line-height: 1.2;
+  color: var(--color-brand-dark);
+  margin-bottom: 1rem;
+}
+
+.industry-fit__text {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.05vw, 15px);
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  max-width: 100%;
+}
+
+.industry-fit__text + .industry-fit__text {
+  margin-top: 0.875rem;
+}
+
+.industry-fit__img {
+  width: 100%;
+  height: clamp(280px, 30vw, 380px);
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+/* =========================================================
+   BLOG POST — dark title band, image, prose body
+   ========================================================= */
+.blog-post {
+  background-color: var(--color-brand-white);
+}
+
+.blog-post__hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(420px, 52vw, 560px);
+  background-color: var(--color-brand-dark);
+  background-size: cover;
+  background-position: center 42%;
+  border-radius: 0 0 28px 28px;
+  overflow: hidden;
+  padding: 8rem var(--gutter) clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.blog-post__hero--empty {
+  min-height: 46vh;
+  align-items: center;
+}
+
+.blog-post__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 9, 10, 0.1) 0%,
+    rgba(10, 9, 10, 0.35) 55%,
+    rgba(10, 9, 10, 0.82) 100%
+  );
+}
+
+.blog-post__hero-inner {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.blog-post__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.blog-post__inner--narrow {
+  max-width: 760px;
+}
+
+.blog-post__back {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+}
+
+.blog-post__back:hover {
+  color: var(--color-brand-white);
+}
+
+.blog-post__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-brand-orange);
+  margin-bottom: 0.75rem;
+}
+
+.blog-post__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+  color: var(--color-brand-white);
+  margin-bottom: 1rem;
+}
+
+.blog-post__meta {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.blog-post__byline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.blog-post__byline-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.blog-post__byline-name {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-brand-white);
+  margin-bottom: 0.125rem;
+}
+
+.blog-post__body {
+  padding: clamp(2.5rem, 5vw, 3.5rem) 0 clamp(3rem, 6vw, 4.5rem);
+}
+
+.blog-post__body p {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.1vw, 17px);
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--color-text-muted);
+}
+
+.blog-post__body p + p {
+  margin-top: 1.25rem;
+}
+
+.blog-post__body p.blog-post__lead {
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--color-brand-dark);
+  margin-bottom: 1.5rem;
+}
+
+.blog-post__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+
+.blog-post__tag {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-brand-dark);
+  background-color: var(--color-surface-light);
+  border-radius: 9999px;
+  padding: 0.375rem 0.875rem;
+}
+
+.blog-post__inner--layout {
+  max-width: 1000px;
+}
+
+.blog-post__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  /* Stretch (the default) so the sidebar's grid cell is exactly as
+     tall as the body column — that gives the sticky sidebar room to
+     travel and stop with the same bottom clearance as the body,
+     instead of running out of room early and butting up against
+     whatever section follows. */
+}
+
+.blog-post__sidebar {
+  position: sticky;
+  top: 6.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.blog-post__share-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.blog-post__share-list {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blog-post__share-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-light);
+  color: var(--color-brand-dark);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.blog-post__share-link svg {
+  width: 15px;
+  height: 15px;
+}
+
+.blog-post__share-link:hover {
+  color: var(--color-brand-orange);
+  border-color: var(--color-brand-orange);
+}
+
+.blog-post__author-card {
+  padding: 1.5rem;
+  background-color: var(--color-surface-light);
+  border-radius: 14px;
+}
+
+.blog-post__author-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.875rem;
+}
+
+.blog-post__author-name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--color-brand-dark);
+  margin-bottom: 0.5rem;
+}
+
+.blog-post__author-bio {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
+.blog-post__related {
+  background-color: var(--color-surface-light);
+  padding: clamp(2.5rem, 5vw, 3.5rem) var(--gutter);
+}
+
+.blog-post__related-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 26px);
+  color: var(--color-brand-dark);
+  margin-bottom: clamp(1.5rem, 3vw, 2rem);
+}
+
+.blog-post__related-grid {
+  margin: 0;
+}
+
+/* =========================================================
+   CONTACT FORM — eyebrow + heading + social, form, info band
+   ========================================================= */
+.contact-form {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter) 0;
+}
+
+.contact-form__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.contact-form__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.contact-form__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.contact-form__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.2;
+  color: var(--color-brand-dark);
+  max-width: 520px;
+}
+
+.contact-form__social {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.contact-form__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-light);
+  color: var(--color-brand-dark);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.contact-form__social-link svg {
+  width: 17px;
+  height: 17px;
+}
+
+.contact-form__social-link:hover {
+  color: var(--color-brand-orange);
+  border-color: var(--color-brand-orange);
+}
+
+.contact-form__form {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.contact-form__row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.75rem;
+}
+
+.contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.contact-form__field--message {
+  margin-top: 1.75rem;
+}
+
+.contact-form__field label {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-brand-dark);
+}
+
+.contact-form__field input,
+.contact-form__field textarea {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-brand-dark);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 0.5rem 0;
+  resize: none;
+  transition: border-color 0.2s ease;
+}
+
+.contact-form__field input::placeholder,
+.contact-form__field textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.contact-form__field input:focus,
+.contact-form__field textarea:focus {
+  outline: none;
+  border-color: var(--color-brand-orange);
+}
+
+.contact-form__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 200px;
+  height: 50px;
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  padding: 0 1.75rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-brand-white);
+  background-color: var(--color-brand-orange);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.contact-form__submit svg {
+  width: 16px;
+  height: 16px;
+}
+
+.contact-form__submit:hover {
+  background-color: var(--color-brand-orange-hover);
+}
+
+.contact-form__submit:active {
+  transform: scale(0.98);
+}
+
+.contact-form__submit:focus-visible {
+  outline: 2px solid var(--color-brand-orange);
+  outline-offset: 3px;
+}
+
+.contact-form__info {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  margin-left: calc(var(--gutter) * -1);
+  margin-right: calc(var(--gutter) * -1);
+  background-color: var(--color-surface-light);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cg fill='none' stroke='%23000000' stroke-opacity='0.05' stroke-width='1.5'%3E%3Cpath d='M-50 40 Q0 10 50 40 T150 40 T250 40 T350 40'/%3E%3Cpath d='M-50 90 Q0 60 50 90 T150 90 T250 90 T350 90'/%3E%3Cpath d='M-50 140 Q0 110 50 140 T150 140 T250 140 T350 140'/%3E%3Cpath d='M-50 190 Q0 160 50 190 T150 190 T250 190 T350 190'/%3E%3Cpath d='M-50 240 Q0 210 50 240 T150 240 T250 240 T350 240'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.contact-form__info-inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2rem;
+  padding: clamp(2.5rem, 5vw, 3.5rem) var(--gutter);
+}
+
+.contact-form__info-intro .contact-form__eyebrow {
+  margin-bottom: 0.625rem;
+}
+
+.contact-form__info-title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.25;
+  color: var(--color-brand-dark);
+}
+
+.contact-form__info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-form__info-label {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-brand-dark);
+}
+
+.contact-form__info-rule {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  margin: 0.5rem 0 0.625rem;
+}
+
+.contact-form__info-col a {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-brand-dark);
+  text-decoration: none;
+}
+
+.contact-form__info-col a:hover {
+  color: var(--color-brand-blue);
+}
+
+.contact-form__info-hours {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  margin-top: 0.375rem;
+}
+
+/* =========================================================
+   DISTRIBUTION — map-backed section, 6-card grid
+   ========================================================= */
+.distribution {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.distribution__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.distribution__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: 1.5rem 3rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.distribution__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.2;
+  color: var(--color-brand-dark);
+}
+
+.distribution__subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.05vw, 14px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.distribution__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.distribution__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 380px;
+  padding: clamp(1.5rem, 2.2vw, 1.875rem) clamp(1.25rem, 2vw, 1.625rem);
+  border-radius: 10px;
+  background-color: var(--color-surface-light);
+  border: 1px solid var(--color-border-light);
+  overflow: hidden;
+}
+
+.distribution__card-link {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Second row is shorter than the first */
+.distribution__card:nth-child(n + 4) {
+  height: 250px;
+}
+
+.distribution__card--active {
+  background-color: var(--color-brand-dark);
+  border-color: var(--color-brand-dark);
+}
+
+/* First row only — map watermark behind the copy */
+.distribution__card:nth-child(3)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('./assets/images/map.png');
+  background-repeat: no-repeat;
+  background-position: center 30%;
+  background-size: 220% auto;
+  opacity: 0.5;
+}
+
+.distribution__card--active:nth-child(3)::before {
+  opacity: 0.3;
+  filter: invert(1);
+}
+
+.distribution__mark,
+.distribution__card-title,
+.distribution__card-text {
+  position: relative;
+}
+
+.distribution__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 1.125rem;
+  color: var(--color-brand-orange);
+  background-color: rgba(245, 158, 11, 0.12);
+  border-radius: 8px;
+}
+
+.distribution__mark svg {
+  width: 18px;
+  height: 18px;
+}
+
+.distribution__card--active .distribution__mark {
+  background-color: rgba(245, 158, 11, 0.16);
+}
+
+.distribution__card-title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.25;
+  color: var(--color-brand-dark);
+  margin-bottom: 0.75rem;
+}
+
+.distribution__card-text {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.05vw, 14px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin-top: auto;
+}
+
+.distribution__card--active .distribution__card-title,
+.distribution__card--active .distribution__card-text {
+  color: var(--color-brand-white);
+}
+
+/* =========================================================
+   NETWORK GRID — centered heading, 6 photo cards
+   ========================================================= */
+.network-grid {
+  background-color: var(--color-brand-white);
+  padding: var(--section-space) var(--gutter);
+}
+
+.network-grid__inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+}
+
+.network-grid__head {
+  max-width: 620px;
+  margin: 0 auto clamp(2rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.network-grid__title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(24px, 2.8vw, 32px);
+  line-height: 1.2;
+  color: var(--color-brand-dark);
+  margin-bottom: 0.875rem;
+}
+
+.network-grid__subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.05vw, 14px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.network-grid__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.network-grid__card {
+  background-color: var(--color-surface-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.network-grid__img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.network-grid__body {
+  padding: 1.375rem 1.5rem 1.625rem;
+}
+
+.network-grid__card-title {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.25;
+  color: var(--color-brand-dark);
+  margin-bottom: 0.625rem;
+}
+
+.network-grid__card-text {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.network-grid__explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-brand-orange);
+  text-decoration: none;
+  transition: gap 0.2s ease;
+}
+
+.network-grid__explore svg {
+  width: 14px;
+  height: 14px;
+}
+
+.network-grid__explore:hover {
+  gap: 0.5rem;
+}
+
+/* =========================================================
+   RESPONSIVE — Tablet (≤ 1024px)
+   ========================================================= */
+@media (max-width: 1024px) {
+  .header {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .header__link {
+    font-size: 0.875rem;
+  }
+
+  .header__contact {
+    height: 36px;
+    padding: 0 1.125rem;
+  }
+
+  .header__logo-img {
+    height: 26px;
+  }
+
+  .hero__content {
+    padding: 8rem var(--gutter) 3rem;
+  }
+
+  /* Below desktop, min()'s vw term outgrows the copy — nowrap then
+     clips it against .hero's overflow:hidden instead of shrinking
+     to fit. Let it wrap and size off a tighter, capped clamp. */
+  .hero__headline {
+    white-space: normal;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    line-height: 1.15;
+  }
+
+  .hero__subtitle {
+    max-width: 620px;
+  }
+
+  .process__subtitle {
+    max-width: 620px;
+  }
+
+  /* 2 x 2 grid. Capped so the connectors don't stretch across half
+     the viewport, and the 2nd item of each row points at nothing. */
+  .process__steps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem 1.5rem;
+    max-width: 680px;
+  }
+
+  .process__step:nth-child(2n)::before,
+  .process__step:nth-child(2n)::after {
+    content: none;
+  }
+
+  /* Stack the heading above the description */
+  .systems__head {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .systems__subtitle {
+    max-width: 100%;
+  }
+
+  /* --- Cards become a carousel, two per view ---
+     A snap track rather than a transform slider, so a swipe works
+     natively and autoplay is just a smooth scrollTo. Keep this
+     breakpoint in step with CAROUSEL_QUERY in Systems.tsx. */
+  .systems__grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(50% - 0.5rem); /* 2 across, minus half the gap */
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .systems__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .systems__card {
+    scroll-snap-align: start;
+  }
+
+  .systems__dots {
+    display: flex;
+  }
+
+  /* Photo above the panel */
+  .growth__inner {
+    grid-template-columns: 1fr;
+  }
+
+  /* Reviews drop to two cards per view */
+  .reviews__track {
+    grid-auto-columns: calc((100% - 1.25rem) / 2);
+    gap: 1.25rem;
+  }
+
+  /* --- Keep the section rhythm even below desktop ---
+     Assurance's closing space and Network's extra height are
+     desktop-only compositional fixes; left on, they make these two
+     gaps 2-3x every other gap on smaller screens. */
+  .assurance {
+    padding-bottom: 0;
+  }
+
+  .network {
+    min-height: 0;
+    padding-top: var(--section-space);
+  }
+
+  /* About: copy above the image grid */
+  .seamless__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .seamless__title,
+  .seamless__text {
+    max-width: 100%;
+  }
+
+  /* About: image above the accordion */
+  .platform__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .platform__img {
+    min-height: 260px;
+  }
+
+  .why-choose__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .why-choose__intro {
+    grid-column: 1 / -1;
+  }
+
+  .capabilities__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .distribution__head {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .distribution__subtitle {
+    max-width: 100%;
+    padding-top: 0;
+  }
+
+  .how-it-works__row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .industry-fit__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .industry-fit__stat:nth-child(3) {
+    border-left: none;
+  }
+
+  .industry-fit__content {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-post__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-post__sidebar {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-top: 0;
+    margin-top: 2rem;
+  }
+
+  .blog-post__author-card {
+    flex: 1;
+    min-width: 220px;
+  }
+
+  .industry-fit__text {
+    max-width: 100%;
+  }
+
+  .distribution__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .network-grid__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-form__row {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .contact-form__info-inner {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .impact__top {
+    grid-template-columns: 1fr;
+  }
+
+  .impact__title,
+  .impact__text {
+    max-width: 100%;
+  }
+
+  .impact__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .abouthero {
+    min-height: 0;
+    padding-top: 8rem;
+  }
+
+  .blog__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  /* Brand spans the top, the three columns sit beneath it */
+  .footer__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .footer__brand {
+    grid-column: 1 / -1;
+    margin-bottom: 1rem;
+  }
+
+  /* Stays three across on tablet — just tighter */
+  .assurance__grid {
+    gap: 1rem;
+  }
+
+  .growth__img {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — Tablet only (641px – 1024px)
+   =========================================================
+   The three columns are narrow here, so the card copy is set a
+   step smaller than it is on phones or desktop. Line heights are
+   unitless ratios, so they follow the size down on their own.
+   ========================================================= */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .assurance__card-title {
+    font-size: 16px;
+  }
+
+  .assurance__card-text {
+    font-size: 13px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — Mobile (≤ 768px)
+   ========================================================= */
+@media (max-width: 768px) {
+  .header {
+    padding: 0.625rem 0.875rem;
+  }
+
+  /* Links and CTA collapse into the hamburger menu */
+  .header__links,
+  .header__contact {
+    display: none;
+  }
+
+  .header__hamburger {
+    display: flex;
+  }
+
+  .header__nav {
+    justify-content: space-between;
+  }
+
+  /* Mobile menu — frosted glass over whatever is behind it, not a
+     solid fill, so it reads as an overlay rather than a flat panel. */
+  .header__mobile-menu {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      160deg,
+      rgba(7, 104, 193, 0.6) 0%,
+      rgba(7, 104, 193, 0.38) 100%
+    );
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    border-left: 1px solid rgba(255, 255, 255, 0.18);
+    z-index: 55;
+    padding: 1.25rem 1.5rem 2rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+  }
+
+  .header__mobile-menu--open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .header__mobile-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+  }
+
+  .header__mobile-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-brand-white);
+    cursor: pointer;
+  }
+
+  .header__mobile-close svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Hero adjustments */
+  .hero__content {
+    padding: 5rem var(--gutter) 2rem;
+    max-width: 100%;
+  }
+
+  .hero__subtitle {
+    max-width: 100%;
+  }
+
+
+  /* --- Services: still pinned, but stacked inside the panel ---
+     Copy above image, and everything trimmed so one service fits
+     within a phone viewport while the section is pinned. */
+  .services__head {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .services__stage {
+    margin-top: 1.5rem;
+  }
+
+  .services__item {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .services__item-title {
+    margin-bottom: 0.625rem;
+  }
+
+  .services__text {
+    line-height: 1.5;
+  }
+
+  .services__text + .services__text {
+    margin-top: 0.625rem;
+  }
+
+  /* CTAs still fit side by side down to ~320px */
+  .hero__cta-group {
+    gap: 0.625rem;
+  }
+
+  .hero__cta {
+    min-width: 0;
+    padding: 0 0.75rem;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE — Large phone (≤ 640px)
+   =========================================================
+   The 2 x 2 step grid gets too narrow here to hold a badge
+   plus two lines of copy, so the flow goes single-column.
+   ========================================================= */
+@media (max-width: 640px) {
+  .process__steps {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    max-width: 420px;
+  }
+
+  /* Selector must match the base rule's specificity to override it */
+  .process__step:not(:last-child)::before,
+  .process__step:not(:last-child)::after {
+    content: none;
+  }
+
+  .process__badge {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1.125rem;
+  }
+
+  .process__step-desc {
+    max-width: 320px;
+  }
+
+  /* Carousels drop to one card per view on phones */
+  .systems__grid {
+    grid-auto-columns: 100%;
+  }
+
+  .reviews__track {
+    grid-auto-columns: 100%;
+    gap: 1rem;
+  }
+
+  .blog__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .brands__group {
+    gap: 2.25rem;
+    padding: 0 1.125rem;
+  }
+
+  .brands__logo {
+    width: 88px;
+  }
+
+  .abouthero {
+    padding-top: 6.5rem;
+  }
+
+  .abouthero__card {
+    max-width: 100%;
+  }
+
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 1.5rem;
+  }
+
+  /* Social block joins the flow instead of hanging right */
+  .footer__col--social {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .footer__top {
+    margin-top: 1.5rem;
+  }
+
+  .footer__watermark {
+    width: 80%;
+    bottom: -6%;
+  }
+
+  /* Card / image / card stays one row through tablet (768px included)
+     and only stacks here, where the columns get too narrow for the copy */
+  .assurance__grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .assurance__media {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* Squarer crop stacked, so the image doesn't run away in height
+     once it has the full column width to itself */
+  .assurance__img {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — Small phone (≤ 480px)
+   ========================================================= */
+@media (max-width: 480px) {
+  .hero__cta {
+    min-width: 0;
+    padding: 0 0.75rem;
+  }
+
+  /* The pinned panel has to fit a short phone viewport (~640px)
+     or the image below the copy gets cut off while pinned. */
+  .services__text {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  /* Letterboxed here purely to buy vertical headroom: the whole
+     panel must clear a ~640px phone viewport while pinned */
+  .services__img {
+    aspect-ratio: 5 / 2;
+  }
+
+  /* Two features side by side get too cramped to read here */
+  .growth__features {
+    grid-template-columns: 1fr;
+  }
+
+  /* Large + stacked pair gets too narrow to read on phones */
+  .seamless__grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    height: auto;
+  }
+
+  .seamless__tile--large {
+    grid-row: auto;
+  }
+
+  .seamless__img {
+    aspect-ratio: 4 / 3;
+    height: auto;
+  }
+
+  .why-choose__grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 220px;
+  }
+
+  .why-choose__intro {
+    grid-column: auto;
+  }
+
+  .capabilities__list {
+    grid-template-columns: 1fr;
+  }
+
+  .distribution__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .network-grid__list {
+    grid-template-columns: 1fr;
+  }
+}
+
