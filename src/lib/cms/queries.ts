@@ -1,4 +1,15 @@
 import { fetchMany, fetchOne, postJson } from './client'
+import {
+  FALLBACK_ABOUT_PAGE,
+  FALLBACK_BLOG_PAGE,
+  FALLBACK_BLOG_POSTS,
+  FALLBACK_CONTACT_PAGE,
+  FALLBACK_GLOBAL,
+  FALLBACK_HOME_PAGE,
+  FALLBACK_SERVICES_PAGE,
+  FALLBACK_TESTIMONIALS,
+  FALLBACK_WAREHOUSING_PAGE,
+} from './fallbacks'
 import type {
   AboutPage,
   BlogPage,
@@ -13,8 +24,8 @@ import type {
 
 const SEO_POPULATE = { seo: { populate: { ogImage: true } } }
 
-export const getGlobal = () =>
-  fetchOne<Global>('global', {
+export const getGlobal = async (): Promise<Global> => {
+  const data = await fetchOne<Global>('global', {
     logo: true,
     footerWatermark: true,
     navigation: true,
@@ -23,9 +34,11 @@ export const getGlobal = () =>
     transportModes: { populate: { image: true } },
     defaultSeo: { populate: { ogImage: true } },
   })
+  return data ?? FALLBACK_GLOBAL
+}
 
-export const getHomePage = () =>
-  fetchOne<HomePage>('home-page', {
+export const getHomePage = async (): Promise<HomePage> => {
+  const data = await fetchOne<HomePage>('home-page', {
     heroBgImage: true,
     heroWordmarkImage: true,
     heroPlaneImage: true,
@@ -40,11 +53,13 @@ export const getHomePage = () =>
     faq: { populate: { items: true } },
     ...SEO_POPULATE,
   })
+  return data ?? FALLBACK_HOME_PAGE
+}
 
 const PAGE_HERO_POPULATE = { hero: { populate: { backgroundImage: true } } }
 
-export const getAboutPage = () =>
-  fetchOne<AboutPage>('about-page', {
+export const getAboutPage = async (): Promise<AboutPage> => {
+  const data = await fetchOne<AboutPage>('about-page', {
     ...PAGE_HERO_POPULATE,
     brandLogos: { populate: { image: true } },
     seamlessTiles: { populate: { image: true } },
@@ -59,15 +74,19 @@ export const getAboutPage = () =>
     networkCta: true,
     ...SEO_POPULATE,
   })
+  return data ?? FALLBACK_ABOUT_PAGE
+}
 
-export const getContactPage = () =>
-  fetchOne<ContactPage>('contact-page', {
+export const getContactPage = async (): Promise<ContactPage> => {
+  const data = await fetchOne<ContactPage>('contact-page', {
     ...PAGE_HERO_POPULATE,
     ...SEO_POPULATE,
   })
+  return data ?? FALLBACK_CONTACT_PAGE
+}
 
-export const getServicesPage = () =>
-  fetchOne<ServicesPage>('services-page', {
+export const getServicesPage = async (): Promise<ServicesPage> => {
+  const data = await fetchOne<ServicesPage>('services-page', {
     ...PAGE_HERO_POPULATE,
     distributionCards: true,
     networkGridCards: { populate: { image: true } },
@@ -75,9 +94,11 @@ export const getServicesPage = () =>
     cta: true,
     ...SEO_POPULATE,
   })
+  return data ?? FALLBACK_SERVICES_PAGE
+}
 
-export const getWarehousingPage = () =>
-  fetchOne<WarehousingPage>('warehousing-page', {
+export const getWarehousingPage = async (): Promise<WarehousingPage> => {
+  const data = await fetchOne<WarehousingPage>('warehousing-page', {
     ...PAGE_HERO_POPULATE,
     capabilitiesCards: true,
     howItWorksSteps: { populate: { image: true } },
@@ -87,14 +108,18 @@ export const getWarehousingPage = () =>
     cta: true,
     ...SEO_POPULATE,
   })
+  return data ?? FALLBACK_WAREHOUSING_PAGE
+}
 
-export const getBlogPage = () =>
-  fetchOne<BlogPage>('blog-page', {
+export const getBlogPage = async (): Promise<BlogPage> => {
+  const data = await fetchOne<BlogPage>('blog-page', {
     ...PAGE_HERO_POPULATE,
     faq: { populate: { items: true } },
     cta: true,
     ...SEO_POPULATE,
   })
+  return data ?? FALLBACK_BLOG_PAGE
+}
 
 const BLOG_POST_POPULATE = {
   image: true,
@@ -103,8 +128,14 @@ const BLOG_POST_POPULATE = {
   ...SEO_POPULATE,
 }
 
-export const getBlogPosts = () =>
-  fetchMany<BlogPost>('blog-posts', BLOG_POST_POPULATE, 'sort=date:desc&pagination[pageSize]=100')
+export const getBlogPosts = async (): Promise<BlogPost[]> => {
+  const posts = await fetchMany<BlogPost>(
+    'blog-posts',
+    BLOG_POST_POPULATE,
+    'sort=date:desc&pagination[pageSize]=100'
+  )
+  return posts.length > 0 ? posts : FALLBACK_BLOG_POSTS
+}
 
 export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
   const params = new URLSearchParams()
@@ -114,11 +145,18 @@ export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> 
     BLOG_POST_POPULATE,
     params.toString()
   )
-  return posts[0] ?? null
+  if (posts[0]) return posts[0]
+  return FALLBACK_BLOG_POSTS.find((p) => p.slug === slug) ?? null
 }
 
-export const getTestimonials = () =>
-  fetchMany<Testimonial>('testimonials', { avatar: true }, 'sort=order:asc&pagination[pageSize]=50')
+export const getTestimonials = async (): Promise<Testimonial[]> => {
+  const items = await fetchMany<Testimonial>(
+    'testimonials',
+    { avatar: true },
+    'sort=order:asc&pagination[pageSize]=50'
+  )
+  return items.length > 0 ? items : FALLBACK_TESTIMONIALS
+}
 
 export interface ContactSubmissionInput {
   name: string

@@ -3,8 +3,8 @@ const STRAPI_URL = (import.meta.env.VITE_STRAPI_URL as string | undefined) ?? 'h
 /** Turns a Strapi-relative media URL (`/uploads/x.png`) into an absolute one. */
 export function mediaUrl(url?: string | null): string {
   if (!url) return ''
-  if (/^https?:\/\//.test(url)) return url
-  return `${STRAPI_URL}${url}`
+  if (/^https?:\/\/|^data:/.test(url) || (url.startsWith('/') && !url.startsWith('/uploads/'))) return url
+  return `${STRAPI_URL}${url.startsWith('/') ? url : `/${url}`}`
 }
 
 /** A populate value: `true` for a leaf, or nested populate for its own relations/media. */
