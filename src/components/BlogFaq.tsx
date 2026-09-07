@@ -1,39 +1,18 @@
 import { useId, useState } from 'react'
+import type { FaqBlock } from '../lib/cms'
 
-const FAQS = [
-  {
-    q: 'How often is new content published?',
-    a: 'We publish a new guide roughly every two weeks, covering freight, warehousing, and day-to-day operations questions we hear from customers.',
-  },
-  {
-    q: 'Can I suggest a topic for the blog?',
-    a: "Yes — send it to our team through the contact page and we'll consider it for an upcoming post.",
-  },
-  {
-    q: 'Are these guides specific to ardle customers?',
-    a: 'Most of the advice applies broadly to freight and warehousing operations, whether or not you ship with us.',
-  },
-  {
-    q: 'Is there a newsletter I can subscribe to?',
-    a: "Not yet — for now, check back on this page or follow our social channels for new posts as they go live.",
-  },
-]
-
-export default function BlogFaq() {
+export default function BlogFaq({ title, subtitle, items }: FaqBlock) {
   const [open, setOpen] = useState<number | null>(0)
   const baseId = useId()
 
   return (
     <section className="faq" id="blog-faq">
       <div className="faq__inner">
-        <h2 className="faq__title">Blog Questions</h2>
-        <p className="faq__subtitle">
-          A few things readers ask us about this blog and how we cover
-          logistics topics.
-        </p>
+        <h2 className="faq__title">{title}</h2>
+        <p className="faq__subtitle">{subtitle}</p>
 
         <ul className="faq__list">
-          {FAQS.map((item, index) => {
+          {items.map((item, index) => {
             const isOpen = open === index
             const panelId = `${baseId}-panel-${index}`
             const buttonId = `${baseId}-button-${index}`
@@ -41,7 +20,7 @@ export default function BlogFaq() {
             return (
               <li
                 className={isOpen ? 'faq__item faq__item--open' : 'faq__item'}
-                key={index}
+                key={item.id}
               >
                 <h3 className="faq__question">
                   <button
@@ -52,7 +31,7 @@ export default function BlogFaq() {
                     aria-controls={panelId}
                     onClick={() => setOpen(isOpen ? null : index)}
                   >
-                    <span>{item.q}</span>
+                    <span>{item.question}</span>
                     <span className="faq__toggle" aria-hidden="true">
                       <svg
                         viewBox="0 0 24 24"
@@ -75,7 +54,7 @@ export default function BlogFaq() {
                   aria-labelledby={buttonId}
                 >
                   <div className="faq__panel-inner">
-                    <p className="faq__answer">{item.a}</p>
+                    <p className="faq__answer">{item.answer}</p>
                   </div>
                 </div>
               </li>

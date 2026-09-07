@@ -1,19 +1,15 @@
-export default function BlogHero() {
+import type { PageHero } from '../lib/cms'
+import { renderMultiline } from '../lib/multiline'
+
+export default function BlogHero({ title, text, ctaText, ctaLink }: PageHero) {
   return (
     <section className="abouthero" id="blog-hero">
       <div className="abouthero__inner">
         <div className="abouthero__card">
-          <h1 className="abouthero__title">
-            Insights & Updates
-            <br />
-            from the Road
-          </h1>
-          <p className="abouthero__text">
-            Practical guides on freight, warehousing, and supply chain
-            operations from the team running the ardle network.
-          </p>
-          <a href="#/contact" className="abouthero__cta">
-            Contact Us
+          <h1 className="abouthero__title">{renderMultiline(title)}</h1>
+          <p className="abouthero__text">{text}</p>
+          <a href={ctaLink} className="abouthero__cta">
+            {ctaText}
           </a>
         </div>
       </div>

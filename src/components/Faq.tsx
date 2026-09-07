@@ -1,45 +1,19 @@
 import { useId, useState } from 'react'
+import type { FaqBlock } from '../lib/cms'
 
-/* Placeholder Q&A carried over from the reference design */
-const FAQS = [
-  {
-    q: 'How does an AI Receptionist benefit healthcare and logistics businesses?',
-    a: 'Yes. A core strength of our custom software development with AI integration is bridging the gap between modern automation and legacy infrastructure. We have extensive experience connecting AI layers to traditional ERPs and CRMs used in the CA, TX, and FL markets.',
-  },
-  {
-    q: 'How does an AI Receptionist benefit healthcare and logistics businesses?',
-    a: 'Yes. A core strength of our custom software development with AI integration is bridging the gap between modern automation and legacy infrastructure. We have extensive experience connecting AI layers to traditional ERPs and CRMs used in the CA, TX, and FL markets.',
-  },
-  {
-    q: 'Can your AI solutions integrate with our existing legacy systems?',
-    a: 'Yes. A core strength of our custom software development with AI integration is bridging the gap between modern automation and legacy infrastructure. We have extensive experience connecting AI layers to traditional ERPs and CRMs used in the CA, TX, and FL markets.',
-  },
-  {
-    q: 'What is the typical ROI for AI business process automation?',
-    a: 'Yes. A core strength of our custom software development with AI integration is bridging the gap between modern automation and legacy infrastructure. We have extensive experience connecting AI layers to traditional ERPs and CRMs used in the CA, TX, and FL markets.',
-  },
-  {
-    q: 'Is your AI automation for healthcare HIPAA compliant?',
-    a: 'Yes. A core strength of our custom software development with AI integration is bridging the gap between modern automation and legacy infrastructure. We have extensive experience connecting AI layers to traditional ERPs and CRMs used in the CA, TX, and FL markets.',
-  },
-]
-
-export default function Faq() {
+export default function Faq({ title, subtitle, items }: FaqBlock) {
   /* Third item open on load, as in the design */
-  const [open, setOpen] = useState<number | null>(2)
+  const [open, setOpen] = useState<number | null>(items.length > 2 ? 2 : 0)
   const baseId = useId()
 
   return (
     <section className="faq" id="faq">
       <div className="faq__inner">
-        <h2 className="faq__title">Powering Smarter Supply Chains</h2>
-        <p className="faq__subtitle">
-          Whether you're shipping hundreds or hundreds of thousands of orders,
-          our intelligent 3PL platform helps you move faster, reduce costs.
-        </p>
+        <h2 className="faq__title">{title}</h2>
+        <p className="faq__subtitle">{subtitle}</p>
 
         <ul className="faq__list">
-          {FAQS.map((item, index) => {
+          {items.map((item, index) => {
             const isOpen = open === index
             const panelId = `${baseId}-panel-${index}`
             const buttonId = `${baseId}-button-${index}`
@@ -47,7 +21,7 @@ export default function Faq() {
             return (
               <li
                 className={isOpen ? 'faq__item faq__item--open' : 'faq__item'}
-                key={index}
+                key={item.id}
               >
                 <h3 className="faq__question">
                   <button
@@ -58,7 +32,7 @@ export default function Faq() {
                     aria-controls={panelId}
                     onClick={() => setOpen(isOpen ? null : index)}
                   >
-                    <span>{item.q}</span>
+                    <span>{item.question}</span>
                     <span className="faq__toggle" aria-hidden="true">
                       <svg
                         viewBox="0 0 24 24"
@@ -81,7 +55,7 @@ export default function Faq() {
                   aria-labelledby={buttonId}
                 >
                   <div className="faq__panel-inner">
-                    <p className="faq__answer">{item.a}</p>
+                    <p className="faq__answer">{item.answer}</p>
                   </div>
                 </div>
               </li>

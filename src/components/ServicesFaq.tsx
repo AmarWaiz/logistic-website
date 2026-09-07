@@ -1,43 +1,18 @@
 import { useId, useState } from 'react'
+import type { FaqBlock } from '../lib/cms'
 
-const FAQS = [
-  {
-    q: 'Which freight modes can you handle for a single shipment?',
-    a: 'Air, ocean, road, and rail — often combined on one shipment. Our platform routes each leg automatically and hands off tracking between modes without any gaps.',
-  },
-  {
-    q: 'How fast can you get a quote back to me?',
-    a: 'Standard lanes are quoted within a few hours. Complex, multi-leg or cross-border routes may take up to a business day while our team confirms capacity and customs requirements.',
-  },
-  {
-    q: "What happens if a shipment is delayed in transit?",
-    a: 'Your account manager is notified automatically and reaches out with a revised ETA and next steps, so you hear about a delay from us before you have to ask.',
-  },
-  {
-    q: 'Do you handle customs clearance for international shipments?',
-    a: 'Yes. Documentation, duties, and clearance are handled in-house across our network, so cross-border freight moves without waiting on a third-party broker.',
-  },
-  {
-    q: 'Can I track a shipment once it leaves the warehouse?',
-    a: 'Every shipment gets a live tracking link the moment it ships, with status updates at each handoff from pickup through final delivery.',
-  },
-]
-
-export default function ServicesFaq() {
+export default function ServicesFaq({ title, subtitle, items }: FaqBlock) {
   const [open, setOpen] = useState<number | null>(0)
   const baseId = useId()
 
   return (
     <section className="faq" id="services-faq">
       <div className="faq__inner">
-        <h2 className="faq__title">Questions About Our Services</h2>
-        <p className="faq__subtitle">
-          Everything you need to know before booking a shipment through the
-          ardle network.
-        </p>
+        <h2 className="faq__title">{title}</h2>
+        <p className="faq__subtitle">{subtitle}</p>
 
         <ul className="faq__list">
-          {FAQS.map((item, index) => {
+          {items.map((item, index) => {
             const isOpen = open === index
             const panelId = `${baseId}-panel-${index}`
             const buttonId = `${baseId}-button-${index}`
@@ -45,7 +20,7 @@ export default function ServicesFaq() {
             return (
               <li
                 className={isOpen ? 'faq__item faq__item--open' : 'faq__item'}
-                key={index}
+                key={item.id}
               >
                 <h3 className="faq__question">
                   <button
@@ -56,7 +31,7 @@ export default function ServicesFaq() {
                     aria-controls={panelId}
                     onClick={() => setOpen(isOpen ? null : index)}
                   >
-                    <span>{item.q}</span>
+                    <span>{item.question}</span>
                     <span className="faq__toggle" aria-hidden="true">
                       <svg
                         viewBox="0 0 24 24"
@@ -79,7 +54,7 @@ export default function ServicesFaq() {
                   aria-labelledby={buttonId}
                 >
                   <div className="faq__panel-inner">
-                    <p className="faq__answer">{item.a}</p>
+                    <p className="faq__answer">{item.answer}</p>
                   </div>
                 </div>
               </li>

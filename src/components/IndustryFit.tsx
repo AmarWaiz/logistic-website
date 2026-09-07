@@ -1,19 +1,22 @@
-import truckImg from '../assets/images/service2.jpg'
+import truckImgFallback from '../assets/images/service2.jpg'
+import { renderMultiline, splitParagraphs } from '../lib/multiline'
+import type { Stat } from '../lib/cms'
 
-const STATS = [
-  { label: 'Years of Industry Experience', value: '20+' },
-  { label: 'Global Business Clients', value: '500+' },
-  { label: 'Order Accuracy', value: '99.1%' },
-  { label: 'Countries Connected', value: '120+' },
-]
+interface IndustryFitProps {
+  title: string
+  text: string
+  image?: string
+  imageAlt: string
+  stats: Stat[]
+}
 
-export default function IndustryFit() {
+export default function IndustryFit({ title, text, image, imageAlt, stats }: IndustryFitProps) {
   return (
     <section className="industry-fit">
       <div className="industry-fit__inner">
         <ul className="industry-fit__stats">
-          {STATS.map((stat) => (
-            <li className="industry-fit__stat" key={stat.label}>
+          {stats.map((stat) => (
+            <li className="industry-fit__stat" key={stat.id}>
               <span className="industry-fit__stat-label">{stat.label}</span>
               <span className="industry-fit__stat-value">{stat.value}</span>
             </li>
@@ -22,28 +25,18 @@ export default function IndustryFit() {
 
         <div className="industry-fit__content">
           <div className="industry-fit__copy">
-            <h2 className="industry-fit__title">
-              Built for Every
-              <br />
-              Industry
-            </h2>
-            <p className="industry-fit__text">
-              Our warehousing solutions flex to fit your category — from
-              e-commerce and retail to healthcare, industrial goods, and
-              cold chain logistics. Custom racking, security protocols,
-              and compliance handling are configured per vertical.
-            </p>
-            <p className="industry-fit__text">
-              Every node runs on the same platform, so no matter which
-              vertical you're in, your team gets the same real-time
-              visibility and reporting across the whole network.
-            </p>
+            <h2 className="industry-fit__title">{renderMultiline(title)}</h2>
+            {splitParagraphs(text).map((paragraph) => (
+              <p className="industry-fit__text" key={paragraph}>
+                {paragraph}
+              </p>
+            ))}
           </div>
 
           <img
             className="industry-fit__img"
-            src={truckImg}
-            alt="Freight truck on the road, ready for delivery"
+            src={image || truckImgFallback}
+            alt={imageAlt}
             loading="lazy"
           />
         </div>

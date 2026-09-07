@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import './App.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -10,32 +9,13 @@ import Warehousing from './pages/Warehousing'
 import BlogList from './pages/BlogList'
 import BlogPost from './pages/BlogPost'
 import { useHashRoute } from './hooks/useHashRoute'
-import { getPostBySlug } from './data/blogPosts'
-
-const SITE_NAME = 'ardle'
-
-function pageTitle(route: string) {
-  if (route === 'about') return 'About Us'
-  if (route === 'contact') return 'Contact Us'
-  if (route === 'services') return 'Services'
-  if (route === 'services/warehousing') return 'Warehousing & Distribution'
-  if (route === 'blog') return 'Blog'
-  if (route.startsWith('blog/')) {
-    const post = getPostBySlug(route.slice('blog/'.length))
-    return post ? post.title : 'Blog'
-  }
-  return 'Freight, Warehousing & Logistics'
-}
+import { GlobalProvider } from './lib/cms/GlobalContext'
 
 function App() {
   const route = useHashRoute()
 
-  useEffect(() => {
-    document.title = `${SITE_NAME} — ${pageTitle(route)}`
-  }, [route])
-
   return (
-    <>
+    <GlobalProvider>
       <Header />
       {route === 'about' ? (
         <About />
@@ -53,7 +33,7 @@ function App() {
         <Home />
       )}
       <Footer />
-    </>
+    </GlobalProvider>
   )
 }
 

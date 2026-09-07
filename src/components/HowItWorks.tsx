@@ -1,59 +1,32 @@
 import { useState } from 'react'
-import onboarding from '../assets/images/ship.jpg'
-import inbound from '../assets/images/LogisticsDoes.webp'
-import inventory from '../assets/images/service1.jpg'
-import distribution from '../assets/images/service2.jpg'
-
-const STEPS = [
-  {
-    number: '01',
-    title: 'Onboarding & Network Mapping',
-    text: 'We assess your shipping volume, customer geography and SKU mix to recommend the optimal warehouse node(s) for your business.',
-    src: onboarding,
-    alt: 'Aerial view of a container ship at sea',
-  },
-  {
-    number: '02',
-    title: 'Inbound & Storage',
-    text: 'Goods are received, quality-checked, and stored using logic designed to minimize pick time and damage risk.',
-    src: inbound,
-    alt: 'Forklift loading pallets at a port warehouse',
-  },
-  {
-    number: '03',
-    title: 'Inventory Management',
-    text: 'Live dashboards give you full visibility into stock levels, aging inventory, and reorder points — so you never overstock or stock out.',
-    src: inventory,
-    alt: 'Stacked containers at a port terminal',
-  },
-  {
-    number: '04',
-    title: 'Distribution & Handoff',
-    text: 'Orders are routed to fulfillment or freight for onward shipping, with optimized transit routes that reduce cost and emissions.',
-    src: distribution,
-    alt: 'Freight trucks at a container yard',
-  },
-]
+import { mediaUrl } from '../lib/cms'
+import type { HowItWorksStep } from '../lib/cms'
 
 const DEFAULT_ACTIVE = 1
 
-export default function HowItWorks() {
+interface HowItWorksProps {
+  title: string
+  steps: HowItWorksStep[]
+}
+
+export default function HowItWorks({ title, steps }: HowItWorksProps) {
   const [active, setActive] = useState(DEFAULT_ACTIVE)
+  const activeStep = steps[active] ?? steps[0]
 
   return (
     <section className="how-it-works">
       <div className="how-it-works__card">
-        <h2 className="how-it-works__title">How It Works</h2>
+        <h2 className="how-it-works__title">{title}</h2>
 
         <ul className="how-it-works__list">
-          {STEPS.slice(0, 2).map((step, index) => (
+          {steps.slice(0, 2).map((step, index) => (
             <li
               className={
                 index === active
                   ? 'how-it-works__row how-it-works__row--active'
                   : 'how-it-works__row'
               }
-              key={step.number}
+              key={step.id}
             >
               <button
                 type="button"
@@ -69,15 +42,17 @@ export default function HowItWorks() {
           ))}
         </ul>
 
-        <img
-          className="how-it-works__img"
-          src={STEPS[active].src}
-          alt={STEPS[active].alt}
-          loading="lazy"
-        />
+        {activeStep && (
+          <img
+            className="how-it-works__img"
+            src={mediaUrl(activeStep.image.url)}
+            alt={activeStep.alt}
+            loading="lazy"
+          />
+        )}
 
         <ul className="how-it-works__list">
-          {STEPS.slice(2, 4).map((step, i) => {
+          {steps.slice(2, 4).map((step, i) => {
             const index = i + 2
             return (
               <li
@@ -86,7 +61,7 @@ export default function HowItWorks() {
                     ? 'how-it-works__row how-it-works__row--active'
                     : 'how-it-works__row'
                 }
-                key={step.number}
+                key={step.id}
               >
                 <button
                   type="button"

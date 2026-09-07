@@ -1,50 +1,19 @@
 import { useCarousel } from '../hooks/useCarousel'
-import avatar from '../assets/images/Avatar.png'
+import avatarFallback from '../assets/images/Avatar.png'
+import { mediaUrl } from '../lib/cms'
+import type { Testimonial } from '../lib/cms'
 
-const REVIEWS = [
-  {
-    name: 'Devon Ashby',
-    role: 'Operations Lead',
-    quote:
-      'Switching our ocean freight over cut our transit-time surprises to almost zero. The tracking dashboard alone paid for the switch.',
-  },
-  {
-    name: 'Yusuf Karim',
-    role: 'Freight Manager',
-    quote:
-      'Our account team catches customs issues before they become delays. That kind of proactive communication is rare in this industry.',
-  },
-  {
-    name: 'Lena Ortiz',
-    role: 'Supply Analyst',
-    quote:
-      'We split inventory across two of their warehouse nodes and cut our average delivery time by two days without adding headcount.',
-  },
-  {
-    name: 'Tomas Vogel',
-    role: 'Warehouse Lead',
-    quote:
-      'Inbound to available-to-sell in under 48 hours, every time. Our previous 3PL took the better part of a week.',
-  },
-  {
-    name: 'Aiko Tanaka',
-    role: 'Customs Broker',
-    quote:
-      'Documentation is clean and complete before the vessel even arrives. It has made cross-border clearance genuinely boring — in a good way.',
-  },
-  {
-    name: 'Mirana Marci',
-    role: 'Retail Operations',
-    quote:
-      "Peak season used to mean panic. Their team flexed our storage capacity up in a week and we never missed a ship date.",
-  },
-]
+interface ReviewsProps {
+  title: string
+  subtitle: string
+  testimonials: Testimonial[]
+}
 
 /* Always a carousel — App.css decides how many cards are in view at
    each width (3 on desktop, 2 on tablet, 1 on phones). */
 const CAROUSEL_QUERY = '(min-width: 0px)'
 
-export default function Reviews() {
+export default function Reviews({ title, subtitle, testimonials }: ReviewsProps) {
   const { ref, active, slides, goTo } = useCarousel<HTMLUListElement>({
     query: CAROUSEL_QUERY,
   })
@@ -52,15 +21,12 @@ export default function Reviews() {
   return (
     <section className="reviews" id="reviews">
       <div className="reviews__inner">
-        <h2 className="reviews__title">Trusted by Teams Like Yours</h2>
-        <p className="reviews__subtitle">
-          From air freight to last-mile delivery, we power global
-          supply chains with reliable, data-driven logistics solutions.
-        </p>
+        <h2 className="reviews__title">{title}</h2>
+        <p className="reviews__subtitle">{subtitle}</p>
 
         <ul className="reviews__track" ref={ref}>
-          {REVIEWS.map((review) => (
-            <li className="reviews__card" key={review.name}>
+          {testimonials.map((review) => (
+            <li className="reviews__card" key={review.id}>
               <div className="reviews__card-head">
                 {/* Opening quote mark */}
                 <svg
@@ -73,8 +39,8 @@ export default function Reviews() {
                   <path d="M21.6 30V17.4C21.6 7.8 27.5 1.6 38.4 0L40 4.9c-5.9 1.3-9 4.5-9.2 8.9h8.8V30H21.6Z" />
                 </svg>
 
-                <div className="reviews__stars" aria-label="Rated 5 out of 5">
-                  {Array.from({ length: 5 }, (_, i) => (
+                <div className="reviews__stars" aria-label={`Rated ${review.rating} out of 5`}>
+                  {Array.from({ length: review.rating }, (_, i) => (
                     <svg
                       key={i}
                       viewBox="0 0 24 24"
@@ -92,7 +58,7 @@ export default function Reviews() {
               <footer className="reviews__person">
                 <img
                   className="reviews__avatar"
-                  src={avatar}
+                  src={review.avatar ? mediaUrl(review.avatar.url) : avatarFallback}
                   alt=""
                   loading="lazy"
                 />

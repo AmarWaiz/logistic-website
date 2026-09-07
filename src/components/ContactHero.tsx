@@ -1,19 +1,15 @@
-export default function ContactHero() {
+import type { PageHero } from '../lib/cms'
+import { renderMultiline } from '../lib/multiline'
+
+export default function ContactHero({ title, text, ctaText, ctaLink }: PageHero) {
   return (
     <section className="abouthero abouthero--contact" id="contact-hero">
       <div className="abouthero__inner">
         <div className="abouthero__card">
-          <h1 className="abouthero__title">
-            Let's Start a
-            <br />
-            Conversation
-          </h1>
-          <p className="abouthero__text">
-            Have a question about a shipment, a quote, or a partnership?
-            Reach out and our team will get back to you shortly.
-          </p>
-          <a href="#contact-form" className="abouthero__cta">
-            Contact Us
+          <h1 className="abouthero__title">{renderMultiline(title)}</h1>
+          <p className="abouthero__text">{text}</p>
+          <a href={ctaLink} className="abouthero__cta">
+            {ctaText}
           </a>
         </div>
       </div>

@@ -1,53 +1,41 @@
 import { useId, useState } from 'react'
-import warehouseImg from '../assets/images/aboutbg.webp'
+import warehouseImgFallback from '../assets/images/aboutbg.webp'
+import type { FaqItem } from '../lib/cms'
 
-const FEATURES = [
-  {
-    q: 'Real-Time Shipment Tracking',
-    a: 'Follow every shipment live from pickup to final-mile delivery, with status updates pushed straight to your dashboard.',
-  },
-  {
-    q: 'Multi-Layered Security Checks & Audits',
-    a: 'Every shipment passes through layered verification and routine audits, keeping your cargo accounted for at each handoff.',
-  },
-  {
-    q: 'Dedicated Account Management',
-    a: 'A dedicated account manager stays on your shipments end to end, so you always have a direct line when it matters.',
-  },
-]
+interface PlatformProps {
+  title: string
+  subtitle: string
+  image?: string
+  imageAlt: string
+  heading: string
+  text: string
+  features: FaqItem[]
+}
 
-export default function Platform() {
+export default function Platform({ title, subtitle, image, imageAlt, heading, text, features }: PlatformProps) {
   const [open, setOpen] = useState<number | null>(0)
   const baseId = useId()
 
   return (
     <section className="platform" id="platform">
       <div className="platform__inner">
-        <h2 className="faq__title">Choose Our Logistics Network</h2>
-        <p className="faq__subtitle">
-          Whether you're shipping hundreds or hundreds of thousands of
-          orders, our intelligent 3PL platform helps you move faster, reduce
-          costs.
-        </p>
+        <h2 className="faq__title">{title}</h2>
+        <p className="faq__subtitle">{subtitle}</p>
 
         <div className="platform__grid">
           <img
             className="platform__img"
-            src={warehouseImg}
-            alt="Warehouse dock where shipments are staged for delivery"
+            src={image || warehouseImgFallback}
+            alt={imageAlt}
             loading="lazy"
           />
 
           <div className="platform__content">
-            <h3 className="platform__heading">Shipping Platform &amp; Technology</h3>
-            <p className="platform__text">
-              From booking to delivery, our technology keeps you informed and
-              in control, giving you real-time visibility and built-in
-              security at every step of your shipment's journey.
-            </p>
+            <h3 className="platform__heading">{heading}</h3>
+            <p className="platform__text">{text}</p>
 
             <ul className="faq__list">
-              {FEATURES.map((item, index) => {
+              {features.map((item, index) => {
                 const isOpen = open === index
                 const panelId = `${baseId}-panel-${index}`
                 const buttonId = `${baseId}-button-${index}`
@@ -55,7 +43,7 @@ export default function Platform() {
                 return (
                   <li
                     className={isOpen ? 'faq__item faq__item--open' : 'faq__item'}
-                    key={item.q}
+                    key={item.id}
                   >
                     <h4 className="faq__question">
                       <button
@@ -66,7 +54,7 @@ export default function Platform() {
                         aria-controls={panelId}
                         onClick={() => setOpen(isOpen ? null : index)}
                       >
-                        <span>{item.q}</span>
+                        <span>{item.question}</span>
                         <span className="faq__toggle" aria-hidden="true">
                           <svg
                             viewBox="0 0 24 24"
@@ -89,7 +77,7 @@ export default function Platform() {
                       aria-labelledby={buttonId}
                     >
                       <div className="faq__panel-inner">
-                        <p className="faq__answer">{item.a}</p>
+                        <p className="faq__answer">{item.answer}</p>
                       </div>
                     </div>
                   </li>

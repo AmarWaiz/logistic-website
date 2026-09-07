@@ -2,12 +2,25 @@ import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import heroBg from '../assets/images/5.webp'
-import heroWordmark from '../assets/images/3.webp'
-import heroPlane from '../assets/images/2.webp'
-import heroTruck from '../assets/images/4.webp'
+import heroBgFallback from '../assets/images/5.webp'
+import heroWordmarkFallback from '../assets/images/3.webp'
+import heroPlaneFallback from '../assets/images/2.webp'
+import heroTruckFallback from '../assets/images/4.webp'
 
 gsap.registerPlugin(ScrollTrigger)
+
+export interface HeroProps {
+  headline: string
+  subtitle: string
+  ctaPrimaryText: string
+  ctaPrimaryLink: string
+  ctaSecondaryText: string
+  ctaSecondaryLink: string
+  bgImage?: string
+  wordmarkImage?: string
+  planeImage?: string
+  truckImage?: string
+}
 
 const WORDMARK_OPACITY = 0.55
 /* Fraction of the timeline spent on the wordmark's intro settle —
@@ -83,7 +96,18 @@ type HeroState = {
   objectPositionY: number
 }
 
-export default function Hero() {
+export default function Hero({
+  headline,
+  subtitle,
+  ctaPrimaryText,
+  ctaPrimaryLink,
+  ctaSecondaryText,
+  ctaSecondaryLink,
+  bgImage,
+  wordmarkImage,
+  planeImage,
+  truckImage,
+}: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -105,10 +129,10 @@ export default function Hero() {
       plane: new Image(),
       truck: new Image(),
     }
-    images.bg.src = heroBg
-    images.logo.src = heroWordmark
-    images.plane.src = heroPlane
-    images.truck.src = heroTruck
+    images.bg.src = bgImage || heroBgFallback
+    images.logo.src = wordmarkImage || heroWordmarkFallback
+    images.plane.src = planeImage || heroPlaneFallback
+    images.truck.src = truckImage || heroTruckFallback
 
     const state: HeroState = {
       bg: { scale: 1 },
@@ -357,16 +381,11 @@ export default function Hero() {
 
       {/* Content layer — unchanged from the previous hero */}
       <div className="hero__content" ref={contentRef}>
-        <h1 className="hero__headline">
-          Tailored solutions for your business
-        </h1>
-        <p className="hero__subtitle">
-          From air freight to last-mile delivery, we power global
-          supply chains with reliable, data-driven logistics solutions.
-        </p>
+        <h1 className="hero__headline">{headline}</h1>
+        <p className="hero__subtitle">{subtitle}</p>
         <div className="hero__cta-group">
-          <a href="#/services" className="hero__cta hero__cta--primary">
-            View Services
+          <a href={ctaPrimaryLink} className="hero__cta hero__cta--primary">
+            {ctaPrimaryText}
             {/* Arrow right */}
             <svg
               className="hero__cta-icon"
@@ -382,7 +401,7 @@ export default function Hero() {
               <path d="m13 6 6 6-6 6" />
             </svg>
           </a>
-          <a href="#/contact" className="hero__cta hero__cta--outline">
+          <a href={ctaSecondaryLink} className="hero__cta hero__cta--outline">
             {/* Envelope */}
             <svg
               className="hero__cta-icon"
@@ -397,7 +416,7 @@ export default function Hero() {
               <rect x="2" y="4" width="20" height="16" rx="2" />
               <path d="m2 7 10 6 10-6" />
             </svg>
-            Contact Us
+            {ctaSecondaryText}
           </a>
         </div>
       </div>

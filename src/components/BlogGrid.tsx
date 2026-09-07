@@ -1,21 +1,25 @@
-import { BLOG_POSTS } from '../data/blogPosts'
+import { mediaUrl } from '../lib/cms'
+import type { BlogPost } from '../lib/cms'
 
-export default function BlogGrid() {
+interface BlogGridProps {
+  title: string
+  subtitle: string
+  posts: BlogPost[]
+}
+
+export default function BlogGrid({ title, subtitle, posts }: BlogGridProps) {
   return (
     <section className="blog" id="blog-grid">
       <div className="blog__inner">
-        <h2 className="blog__title">Latest from the Blog</h2>
-        <p className="blog__subtitle">
-          Guides and field notes on freight, warehousing, and running a
-          leaner supply chain.
-        </p>
+        <h2 className="blog__title">{title}</h2>
+        <p className="blog__subtitle">{subtitle}</p>
 
         <ul className="blog__grid">
-          {BLOG_POSTS.map((post) => (
-            <li className="blog__card" key={post.slug}>
+          {posts.map((post) => (
+            <li className="blog__card" key={post.id}>
               <img
                 className="blog__img"
-                src={post.image}
+                src={mediaUrl(post.image.url)}
                 alt={post.alt}
                 loading="lazy"
               />
@@ -32,7 +36,7 @@ export default function BlogGrid() {
               <p className="blog__excerpt">{post.excerpt}</p>
 
               <p className="blog__meta">
-                By {post.author} <span aria-hidden="true">·</span> {post.readTime}
+                By {post.author?.name ?? 'ardle'} <span aria-hidden="true">·</span> {post.readTime}
               </p>
             </li>
           ))}

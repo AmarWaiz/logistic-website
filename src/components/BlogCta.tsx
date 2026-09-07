@@ -1,14 +1,13 @@
-export default function BlogCta() {
+import type { CtaBanner } from '../lib/cms'
+
+export default function BlogCta({ title, subtitle, buttonText, buttonLink }: CtaBanner) {
   return (
     <section className="network" id="blog-cta">
       <div className="network__inner">
-        <h2 className="network__title">Have a Shipment to Plan?</h2>
-        <p className="network__subtitle">
-          Put what you've read into practice — talk to our team about your
-          next shipment or storage need.
-        </p>
-        <a href="#/contact" className="network__cta">
-          Contact Us
+        <h2 className="network__title">{title}</h2>
+        <p className="network__subtitle">{subtitle}</p>
+        <a href={buttonLink} className="network__cta">
+          {buttonText}
         </a>
       </div>
     </section>

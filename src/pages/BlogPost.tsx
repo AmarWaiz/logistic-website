@@ -1,4 +1,9 @@
-import { getPostBySlug, getRelatedPosts } from '../data/blogPosts'
+import { useCmsData } from '../hooks/useCmsData'
+import { useSeo } from '../hooks/useSeo'
+import { useGlobal } from '../lib/cms/GlobalContext'
+import { getBlogPostBySlug, getBlogPosts, mediaUrl } from '../lib/cms'
+import { splitParagraphs } from '../lib/multiline'
+import avatarFallback from '../assets/images/Avatar.png'
 
 const SHARE = [
   {
@@ -32,7 +37,13 @@ const SHARE = [
 ]
 
 export default function BlogPost({ slug }: { slug: string }) {
-  const post = getPostBySlug(slug)
+  const { data: global } = useGlobal()
+  const { data: post, loading } = useCmsData(() => getBlogPostBySlug(slug), [slug])
+  const { data: allPosts } = useCmsData(getBlogPosts, [])
+
+  useSeo(post?.seo, global?.defaultSeo, global?.siteName)
+
+  if (loading) return null
 
   if (!post) {
     return (
@@ -54,13 +65,18 @@ export default function BlogPost({ slug }: { slug: string }) {
     )
   }
 
-  const related = getRelatedPosts(slug)
+  const rest = (allPosts ?? []).filter((p) => p.slug !== slug)
+  const sameCategory = rest.filter((p) => p.category === post.category)
+  const others = rest.filter((p) => p.category !== post.category)
+  const related = [...sameCategory, ...others].slice(0, 3)
+
+  const authorAvatar = post.author?.avatar ? mediaUrl(post.author.avatar.url) : avatarFallback
 
   return (
     <section className="blog-post">
       <div
         className="blog-post__hero"
-        style={{ backgroundImage: `url(${post.image})` }}
+        style={{ backgroundImage: `url(${mediaUrl(post.image.url)})` }}
       >
         <div className="blog-post__hero-overlay" />
         <div className="blog-post__hero-inner">
@@ -73,14 +89,19 @@ export default function BlogPost({ slug }: { slug: string }) {
           <div className="blog-post__byline">
             <img
               className="blog-post__byline-avatar"
-              src={post.authorAvatar}
+              src={authorAvatar}
               alt=""
               aria-hidden="true"
             />
             <div>
-              <p className="blog-post__byline-name">{post.author}</p>
+              <p className="blog-post__byline-name">{post.author?.name ?? 'ardle'}</p>
               <p className="blog-post__meta">
-                {post.date} <span aria-hidden="true">·</span> {post.readTime}
+                {new Date(post.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}{' '}
+                <span aria-hidden="true">·</span> {post.readTime}
               </p>
             </div>
           </div>
@@ -91,14 +112,14 @@ export default function BlogPost({ slug }: { slug: string }) {
         <div className="blog-post__layout">
           <div className="blog-post__body">
             <p className="blog-post__lead">{post.excerpt}</p>
-            {post.body.map((paragraph, index) => (
+            {splitParagraphs(post.body).map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
 
             <ul className="blog-post__tags">
               {post.tags.map((tag) => (
-                <li key={tag} className="blog-post__tag">
-                  {tag}
+                <li key={tag.id} className="blog-post__tag">
+                  {tag.label}
                 </li>
               ))}
             </ul>
@@ -124,16 +145,18 @@ export default function BlogPost({ slug }: { slug: string }) {
               </ul>
             </div>
 
-            <div className="blog-post__author-card">
-              <img
-                className="blog-post__author-avatar"
-                src={post.authorAvatar}
-                alt=""
-                aria-hidden="true"
-              />
-              <p className="blog-post__author-name">{post.author}</p>
-              <p className="blog-post__author-bio">{post.authorBio}</p>
-            </div>
+            {post.author && (
+              <div className="blog-post__author-card">
+                <img
+                  className="blog-post__author-avatar"
+                  src={authorAvatar}
+                  alt=""
+                  aria-hidden="true"
+                />
+                <p className="blog-post__author-name">{post.author.name}</p>
+                <p className="blog-post__author-bio">{post.author.bio}</p>
+              </div>
+            )}
           </aside>
         </div>
       </div>
@@ -147,7 +170,7 @@ export default function BlogPost({ slug }: { slug: string }) {
                 <li className="blog__card" key={item.slug}>
                   <img
                     className="blog__img"
-                    src={item.image}
+                    src={mediaUrl(item.image.url)}
                     alt={item.alt}
                     loading="lazy"
                   />
@@ -161,7 +184,7 @@ export default function BlogPost({ slug }: { slug: string }) {
                   <h3 className="blog__card-title">{item.title}</h3>
                   <p className="blog__excerpt">{item.excerpt}</p>
                   <p className="blog__meta">
-                    By {item.author} <span aria-hidden="true">·</span> {item.readTime}
+                    By {item.author?.name ?? 'ardle'} <span aria-hidden="true">·</span> {item.readTime}
                   </p>
                 </li>
               ))}

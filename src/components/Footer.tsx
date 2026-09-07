@@ -1,77 +1,31 @@
-import logo from '../assets/images/logo.png'
-import watermark from '../assets/images/footerlogo.png'
+import logoFallback from '../assets/images/logo.png'
+import watermarkFallback from '../assets/images/footerlogo.png'
+import { useGlobal } from '../lib/cms/GlobalContext'
+import { mediaUrl } from '../lib/cms'
+import { renderMultiline } from '../lib/multiline'
+import { SOCIAL_ICON_PATHS, SOCIAL_LABELS } from './socialIcons'
 
-const NAV = [
+const FALLBACK_NAV = [
   { label: 'Service', href: '#/services' },
   { label: 'About us', href: '#/about' },
   { label: 'Contact', href: '#/contact' },
   { label: 'FAQs', href: '#/' },
 ]
 
-const SOCIAL = [
-  {
-    label: 'Facebook',
-    href: '#',
-    path: (
-      <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.29-.04-1.27-.12-2.4-.12-2.4 0-4 1.45-4 4.13V9.9H7.6V13h2.7v8h3.2Z" />
-    ),
-  },
-  {
-    label: 'Instagram',
-    href: '#',
-    path: (
-      <>
-        <rect
-          x="3.2"
-          y="3.2"
-          width="17.6"
-          height="17.6"
-          rx="5"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.7"
-        />
-        <circle
-          cx="12"
-          cy="12"
-          r="4"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.7"
-        />
-        <circle cx="17.1" cy="6.9" r="1.2" />
-      </>
-    ),
-  },
-  {
-    label: 'YouTube',
-    href: '#',
-    path: (
-      <>
-        <rect
-          x="2.4"
-          y="5.4"
-          width="19.2"
-          height="13.2"
-          rx="4"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.7"
-        />
-        <path d="M10.4 15.2V8.8L15.8 12l-5.4 3.2Z" />
-      </>
-    ),
-  },
-  {
-    label: 'TikTok',
-    href: '#',
-    path: (
-      <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-1.81-2.47v-3.2a5.79 5.79 0 1 0 5 5.73V9.01a7.35 7.35 0 0 0 4.29 1.38V7.3a4.28 4.28 0 0 1-3.33-1.48Z" />
-    ),
-  },
-]
-
 export default function Footer() {
+  const { data: global } = useGlobal()
+
+  const nav = global?.footerNavigation.length ? global.footerNavigation : FALLBACK_NAV
+  const logo = global?.logo ? mediaUrl(global.logo.url) : logoFallback
+  const watermark = global?.footerWatermark ? mediaUrl(global.footerWatermark.url) : watermarkFallback
+  const siteName = global?.siteName ?? 'ardle'
+  const tagline = global?.footerTagline ?? "Let's move your\nbusiness forward"
+  const phone = global?.contactPhone
+  const email = global?.contactEmail
+  const address = global?.address
+  const social = global?.socialLinks ?? []
+  const copyright = global?.copyrightText ?? 'All rights reserved.'
+
   return (
     <footer className="footer">
       <img className="footer__watermark" src={watermark} alt="" aria-hidden="true" />
@@ -79,12 +33,8 @@ export default function Footer() {
       <div className="footer__inner">
         <div className="footer__grid">
           <div className="footer__brand">
-            <img className="footer__logo" src={logo} alt="ardle" />
-            <p className="footer__tagline">
-              Let's move your
-              <br />
-              business forward
-            </p>
+            <img className="footer__logo" src={logo} alt={siteName} />
+            <p className="footer__tagline">{renderMultiline(tagline)}</p>
             <a href="#/contact" className="footer__cta">
               Contact Us
               <svg
@@ -105,7 +55,7 @@ export default function Footer() {
           <nav className="footer__col" aria-label="Footer">
             <h2 className="footer__col-title">Navigation</h2>
             <ul className="footer__list">
-              {NAV.map((item) => (
+              {nav.map((item) => (
                 <li key={item.label}>
                   <a className="footer__link" href={item.href}>
                     {item.label}
@@ -118,36 +68,40 @@ export default function Footer() {
           <div className="footer__col">
             <h2 className="footer__col-title">Our address</h2>
             <ul className="footer__list">
-              <li>
-                <a className="footer__link" href="tel:+84965657893">
-                  +84 965 657 893
-                </a>
-              </li>
-              <li>
-                <a className="footer__link" href="mailto:contact@capiproduct.com">
-                  contact@capiproduct.com
-                </a>
-              </li>
-              <li>
-                <address className="footer__address">
-                  35 To Vinh Dien str, Thanh Xuan, Hanoi, Vietnam
-                </address>
-              </li>
+              {phone && (
+                <li>
+                  <a className="footer__link" href={`tel:${phone.replace(/\s+/g, '')}`}>
+                    {phone}
+                  </a>
+                </li>
+              )}
+              {email && (
+                <li>
+                  <a className="footer__link" href={`mailto:${email}`}>
+                    {email}
+                  </a>
+                </li>
+              )}
+              {address && (
+                <li>
+                  <address className="footer__address">{address}</address>
+                </li>
+              )}
             </ul>
           </div>
 
           <div className="footer__col footer__col--social">
             <h2 className="footer__col-title">Our social</h2>
             <ul className="footer__social">
-              {SOCIAL.map((item) => (
-                <li key={item.label}>
+              {social.map((item) => (
+                <li key={item.id}>
                   <a
                     className="footer__social-link"
-                    href={item.href}
-                    aria-label={item.label}
+                    href={item.url}
+                    aria-label={SOCIAL_LABELS[item.platform]}
                   >
                     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      {item.path}
+                      {SOCIAL_ICON_PATHS[item.platform]}
                     </svg>
                   </a>
                 </li>
@@ -178,9 +132,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="footer__copyright">
-          Copyrights 2025 Logistic. All rights reserved.
-        </p>
+        <p className="footer__copyright">{copyright}</p>
       </div>
     </footer>
   )

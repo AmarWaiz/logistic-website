@@ -1,47 +1,46 @@
-import portrait from '../assets/images/service2.jpg'
+import portraitFallback from '../assets/images/service2.jpg'
+import { splitParagraphs } from '../lib/multiline'
+import type { Stat } from '../lib/cms'
 
-const STATS = [
-  { value: '20+', label: 'Years Experience', tone: 'gold' },
-  { value: '20+', label: 'Years Experience', tone: 'white' },
-  { value: '20+', label: 'Years Experience', tone: 'teal' },
-] as const
+interface ImpactProps {
+  title: string
+  text: string
+  image?: string
+  imageAlt: string
+  ctaText: string
+  ctaLink: string
+  stats: Stat[]
+}
 
-export default function Impact() {
+export default function Impact({ title, text, image, imageAlt, ctaText, ctaLink, stats }: ImpactProps) {
   return (
     <section className="impact">
       <div className="impact__card">
         <div className="impact__top">
           <div className="impact__copy">
-            <h2 className="impact__title">
-              Seamless airtransport for every need
-            </h2>
-            <p className="impact__text">
-              From air freight to last-mile delivery, we power global supply
-              chains with reliable, data-driven logistics solutions. From air
-              freight to last-mile delivery.
-            </p>
-            <p className="impact__text">
-              We power global supply chains with reliable, data-driven
-              logistics solutions, from air freight to last-mile delivery
-              across logistics solutions.
-            </p>
-            
-            <a href="#/contact" className="impact__cta">
-              Contact Us
+            <h2 className="impact__title">{title}</h2>
+            {splitParagraphs(text).map((paragraph) => (
+              <p className="impact__text" key={paragraph}>
+                {paragraph}
+              </p>
+            ))}
+
+            <a href={ctaLink} className="impact__cta">
+              {ctaText}
             </a>
           </div>
 
           <img
             className="impact__img"
-            src={portrait}
-            alt="Freight moving through the ardle logistics network"
+            src={image || portraitFallback}
+            alt={imageAlt}
             loading="lazy"
           />
         </div>
 
         <ul className="impact__stats">
-          {STATS.map((stat, index) => (
-            <li className={`impact__stat impact__stat--${stat.tone}`} key={index}>
+          {stats.map((stat) => (
+            <li className={`impact__stat impact__stat--${stat.tone ?? 'white'}`} key={stat.id}>
               <span className="impact__stat-value">{stat.value}</span>
               <span className="impact__stat-label">{stat.label}</span>
             </li>

@@ -1,14 +1,19 @@
-import roadImg from '../assets/images/LogisticsDoes.webp'
+import roadImgFallback from '../assets/images/LogisticsDoes.webp'
 
-export default function RoadBanner() {
+interface RoadBannerProps {
+  image?: string
+  alt: string
+}
+
+export default function RoadBanner({ image, alt }: RoadBannerProps) {
   return (
     <section className="road-banner" aria-label="On the road">
       <div className="road-banner__inner">
         <div className="road-banner__media">
           <img
             className="road-banner__img"
-            src={roadImg}
-            alt="Truck, ship and aircraft moving freight through the logistics network"
+            src={image || roadImgFallback}
+            alt={alt}
             loading="lazy"
           />
           <button type="button" className="road-banner__play" aria-label="Play video">

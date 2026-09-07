@@ -1,54 +1,34 @@
 import { useState } from 'react'
-
-const CARDS = [
-  {
-    number: '01',
-    title: 'Multi-Node Storage Architecture',
-    text: 'Facilities positioned near key transit hubs and ports, minimizing last-leg transportation time.',
-  },
-  {
-    number: '02',
-    title: 'Real-Time Inventory Visibility',
-    text: 'Track stock levels, movement, and turnover across every warehouse from a single dashboard.',
-  },
-  {
-    number: '03',
-    title: 'Scalable Storage Capacity',
-    text: 'Flex up during peak season and down during slow periods, without long-term lease commitments.',
-  },
-  {
-    number: '04',
-    title: 'Rapid Pickup & Turnaround',
-    text: 'Optimized dock scheduling and pallet turnover engineered for speed, not queues.',
-  },
-]
+import { renderMultiline } from '../lib/multiline'
+import type { NumberedFeature } from '../lib/cms'
 
 const DEFAULT_ACTIVE = 1
 
-export default function WarehousingCapabilities() {
+interface WarehousingCapabilitiesProps {
+  title: string
+  cards: NumberedFeature[]
+}
+
+export default function WarehousingCapabilities({ title, cards }: WarehousingCapabilitiesProps) {
   const [active, setActive] = useState(DEFAULT_ACTIVE)
 
   return (
     <section className="capabilities" id="warehousing-capabilities">
       <div className="capabilities__inner">
-        <h2 className="faq__title">
-          Why Choose Our Warehousing &amp;
-          <br />
-          Distribution Network
-        </h2>
+        <h2 className="faq__title">{renderMultiline(title)}</h2>
 
         <ul
           className="capabilities__list"
           onMouseLeave={() => setActive(DEFAULT_ACTIVE)}
         >
-          {CARDS.map((card, index) => (
+          {cards.map((card, index) => (
             <li
               className={
                 index === active
                   ? 'capabilities__card capabilities__card--active'
                   : 'capabilities__card'
               }
-              key={card.number}
+              key={card.id}
               tabIndex={0}
               onMouseEnter={() => setActive(index)}
               onFocus={() => setActive(index)}

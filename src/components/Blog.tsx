@@ -1,23 +1,27 @@
-import { BLOG_POSTS } from '../data/blogPosts'
+import { mediaUrl } from '../lib/cms'
+import type { BlogPost } from '../lib/cms'
 
-const FEATURED = BLOG_POSTS.slice(0, 3)
+interface BlogProps {
+  title: string
+  subtitle: string
+  posts: BlogPost[]
+}
 
-export default function Blog() {
+export default function Blog({ title, subtitle, posts }: BlogProps) {
+  const featured = posts.slice(0, 3)
+
   return (
     <section className="blog" id="blog">
       <div className="blog__inner">
-        <h2 className="blog__title">Latest From the Blog</h2>
-        <p className="blog__subtitle">
-          Guides and field notes on freight, warehousing, and running a
-          leaner supply chain.
-        </p>
+        <h2 className="blog__title">{title}</h2>
+        <p className="blog__subtitle">{subtitle}</p>
 
         <ul className="blog__grid">
-          {FEATURED.map((post) => (
-            <li className="blog__card" key={post.slug}>
+          {featured.map((post) => (
+            <li className="blog__card" key={post.id}>
               <img
                 className="blog__img"
-                src={post.image}
+                src={mediaUrl(post.image.url)}
                 alt={post.alt}
                 loading="lazy"
               />
@@ -34,7 +38,7 @@ export default function Blog() {
               <p className="blog__excerpt">{post.excerpt}</p>
 
               <p className="blog__meta">
-                By {post.author} <span aria-hidden="true">·</span> {post.readTime}
+                By {post.author?.name ?? 'ardle'} <span aria-hidden="true">·</span> {post.readTime}
               </p>
             </li>
           ))}

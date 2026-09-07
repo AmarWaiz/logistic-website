@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import logoWhite from '../assets/images/logo.png'
 import { useHashRoute } from '../hooks/useHashRoute'
+import { useGlobal } from '../lib/cms/GlobalContext'
+import { mediaUrl } from '../lib/cms'
 
 interface NavItem {
   label: string
@@ -10,17 +12,33 @@ interface NavItem {
   route?: string
 }
 
-/* `#/name` are page routes; plain `#name` are in-page anchors */
-const NAV: NavItem[] = [
+/* `#/name` are page routes; plain `#name` are in-page anchors. Matches
+   Global Settings' navigation by href, and doubles as the fallback
+   shown before the CMS responds or if it's unreachable. */
+const FALLBACK_NAV: NavItem[] = [
   { label: 'Home', href: '#/', route: '' },
   { label: 'About Us', href: '#/about', route: 'about' },
   { label: 'Services', href: '#/services', route: 'services' },
   { label: 'Blogs', href: '#/blog', route: 'blog' },
 ]
 
+function routeForHref(href: string): string {
+  const match = href.match(/^#\/(.*)$/)
+  return match ? match[1] : ''
+}
+
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const route = useHashRoute()
+  const { data: global } = useGlobal()
+
+  const nav: NavItem[] = global?.navigation.length
+    ? global.navigation.map((item) => ({ ...item, route: routeForHref(item.href) }))
+    : FALLBACK_NAV
+  const logoSrc = global?.logo ? mediaUrl(global.logo.url) : logoWhite
+  const siteName = global?.siteName ?? 'ardle'
+  const contactLabel = global?.headerContactLabel ?? 'Contact Us'
+  const contactHref = global?.headerContactHref ?? '#/contact'
 
   const isCurrent = (item: NavItem) =>
     item.route !== undefined &&
@@ -39,12 +57,12 @@ export default function Header() {
   return (
     <header className="header" id="header">
       <nav className="header__nav">
-        <a href="#/" className="header__logo" aria-label="ardle home">
-          <img src={logoWhite} alt="ardle" className="header__logo-img" />
+        <a href="#/" className="header__logo" aria-label={`${siteName} home`}>
+          <img src={logoSrc} alt={siteName} className="header__logo-img" />
         </a>
 
         <ul className="header__links">
-          {NAV.map((item) => (
+          {nav.map((item) => (
             <li key={item.label}>
               <a
                 href={item.href}
@@ -62,11 +80,11 @@ export default function Header() {
         </ul>
 
         <a
-          href="#/contact"
+          href={contactHref}
           className="header__contact"
           aria-current={route === 'contact' ? 'page' : undefined}
         >
-          Contact Us
+          {contactLabel}
         </a>
 
         {/* Mobile hamburger */}
@@ -92,10 +110,10 @@ export default function Header() {
             <a
               href="#/"
               className="header__logo"
-              aria-label="ardle home"
+              aria-label={`${siteName} home`}
               onClick={() => setMobileOpen(false)}
             >
-              <img src={logoWhite} alt="ardle" className="header__logo-img" />
+              <img src={logoSrc} alt={siteName} className="header__logo-img" />
             </a>
 
             <button
@@ -118,7 +136,7 @@ export default function Header() {
           </div>
 
           <ul className="header__mobile-list">
-            {NAV.map((item) => (
+            {nav.map((item) => (
               <li key={item.label}>
                 <a
                   href={item.href}
@@ -135,11 +153,11 @@ export default function Header() {
             ))}
             <li>
               <a
-                href="#/contact"
+                href={contactHref}
                 className="header__mobile-link"
                 onClick={() => setMobileOpen(false)}
               >
-                Contact Us
+                {contactLabel}
               </a>
             </li>
           </ul>

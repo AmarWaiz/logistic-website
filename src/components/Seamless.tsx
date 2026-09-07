@@ -1,47 +1,40 @@
-import trucks from '../assets/images/service2.jpg'
-import ship from '../assets/images/ship.jpg'
-import containers from '../assets/images/service1.jpg'
+import { mediaUrl } from '../lib/cms'
+import { splitParagraphs } from '../lib/multiline'
+import type { ImageTile } from '../lib/cms'
 
-/* Imagery reused from elsewhere on the site */
-const TILES = [
-  { src: ship, alt: 'Container ship under way at sea', large: true },
-  { src: trucks, alt: 'Freight trucks at a container yard' },
-  { src: containers, alt: 'Stacked containers at a port terminal' },
-]
+interface SeamlessProps {
+  title: string
+  text: string
+  ctaText: string
+  ctaLink: string
+  tiles: ImageTile[]
+}
 
-export default function Seamless() {
+export default function Seamless({ title, text, ctaText, ctaLink, tiles }: SeamlessProps) {
   return (
     <section className="seamless" id="airtransport">
       <div className="seamless__inner">
         <div className="seamless__copy">
-          <h2 className="seamless__title">
-            Seamless airtransport for every need
-          </h2>
-          <p className="seamless__text">
-            From air freight to last-mile delivery, we power global supply
-            chains with reliable, data-driven logistics solutions. From air
-            freight to last-mile delivery, we power global supply chains
-            with reliable, data-driven logistics solutions.
-          </p>
-          <p className="seamless__text">
-            We power global supply chains with reliable, data-driven
-            logistics solutions, from air freight to last-mile delivery
-            across logistics solutions.
-          </p>
-          <a href="#/contact" className="seamless__cta">
-            Get in touch
+          <h2 className="seamless__title">{title}</h2>
+          {splitParagraphs(text).map((paragraph) => (
+            <p className="seamless__text" key={paragraph}>
+              {paragraph}
+            </p>
+          ))}
+          <a href={ctaLink} className="seamless__cta">
+            {ctaText}
           </a>
         </div>
 
         <ul className="seamless__grid">
-          {TILES.map((tile) => (
+          {tiles.map((tile) => (
             <li
               className={`seamless__tile${tile.large ? ' seamless__tile--large' : ''}`}
-              key={tile.alt}
+              key={tile.id}
             >
               <img
                 className="seamless__img"
-                src={tile.src}
+                src={mediaUrl(tile.image.url)}
                 alt={tile.alt}
                 loading="lazy"
               />

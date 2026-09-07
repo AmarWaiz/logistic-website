@@ -1,16 +1,20 @@
-export default function Promo() {
+interface PromoProps {
+  title: string
+  text: string
+  ctaText: string
+  ctaLink: string
+}
+
+export default function Promo({ title, text, ctaText, ctaLink }: PromoProps) {
   return (
     <section className="promo" id="promo">
       <div className="promo__inner">
         <div className="promo__card">
           <div className="promo__content">
-            <h2 className="promo__title">Have An Unforgettable Experience</h2>
-            <p className="promo__text">
-              Have an unforgettable experience and play now to
-              get attractive promos
-            </p>
-            <a href="#/contact" className="promo__cta">
-              Get started
+            <h2 className="promo__title">{title}</h2>
+            <p className="promo__text">{text}</p>
+            <a href={ctaLink} className="promo__cta">
+              {ctaText}
             </a>
           </div>
         </div>
