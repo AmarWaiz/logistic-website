@@ -1,9 +1,17 @@
 import type { PageHero } from '../lib/cms'
+import { mediaUrl } from '../lib/cms'
 import { renderMultiline } from '../lib/multiline'
 
-export default function AboutHero({ title, text, ctaText, ctaLink }: PageHero) {
+export default function AboutHero({ title, text, ctaText, ctaLink, backgroundImage }: PageHero) {
   return (
     <section className="abouthero" id="about">
+      {backgroundImage && (
+        <div
+          className="abouthero__custom-bg"
+          style={{ backgroundImage: `url(${mediaUrl(backgroundImage.url)})` }}
+          aria-hidden="true"
+        />
+      )}
       <div className="abouthero__inner">
         <div className="abouthero__card">
           <h1 className="abouthero__title">{renderMultiline(title)}</h1>

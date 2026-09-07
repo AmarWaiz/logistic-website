@@ -5,6 +5,7 @@ import IndustryFit from '../components/IndustryFit'
 import WarehousingFaq from '../components/WarehousingFaq'
 import WarehousingCta from '../components/WarehousingCta'
 import CmsUnavailable from '../components/CmsUnavailable'
+import { PageHeroSkeleton } from '../components/PageSkeleton'
 import { useCmsData } from '../hooks/useCmsData'
 import { useSeo } from '../hooks/useSeo'
 import { useGlobal } from '../lib/cms/GlobalContext'
@@ -16,7 +17,7 @@ export default function Warehousing() {
 
   useSeo(warehousing?.seo, global?.defaultSeo, global?.siteName)
 
-  if (!warehousing) return loading ? null : <CmsUnavailable />
+  if (!warehousing) return loading ? <PageHeroSkeleton /> : <CmsUnavailable />
 
   return (
     <>

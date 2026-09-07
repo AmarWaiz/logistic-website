@@ -16,8 +16,8 @@ export default function Seamless({ title, text, ctaText, ctaLink, tiles }: Seaml
       <div className="seamless__inner">
         <div className="seamless__copy">
           <h2 className="seamless__title">{title}</h2>
-          {splitParagraphs(text).map((paragraph) => (
-            <p className="seamless__text" key={paragraph}>
+          {splitParagraphs(text || '').map((paragraph, index) => (
+            <p className="seamless__text" key={index}>
               {paragraph}
             </p>
           ))}
@@ -27,15 +27,15 @@ export default function Seamless({ title, text, ctaText, ctaLink, tiles }: Seaml
         </div>
 
         <ul className="seamless__grid">
-          {tiles.map((tile) => (
+          {(tiles ?? []).map((tile) => (
             <li
               className={`seamless__tile${tile.large ? ' seamless__tile--large' : ''}`}
               key={tile.id}
             >
               <img
                 className="seamless__img"
-                src={mediaUrl(tile.image.url)}
-                alt={tile.alt}
+                src={tile.image?.url ? mediaUrl(tile.image.url) : ''}
+                alt={tile.alt || ''}
                 loading="lazy"
               />
             </li>

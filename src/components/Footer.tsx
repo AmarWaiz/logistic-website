@@ -9,7 +9,7 @@ const FALLBACK_NAV = [
   { label: 'Service', href: '#/services' },
   { label: 'About us', href: '#/about' },
   { label: 'Contact', href: '#/contact' },
-  { label: 'FAQs', href: '#/' },
+  { label: 'FAQs', href: '#faq' },
 ]
 
 export default function Footer() {

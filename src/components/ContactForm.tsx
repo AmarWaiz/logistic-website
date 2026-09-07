@@ -39,6 +39,12 @@ export default function ContactForm({
     const phoneValue = String(data.get('phone') ?? '').trim()
     const message = String(data.get('message') ?? '').trim()
 
+    if (!name || !contactEmail || !message) {
+      setStatus('error')
+      setErrorMessage('Please fill in all required fields.')
+      return
+    }
+
     setStatus('submitting')
     const result = await submitContactForm({
       name,
@@ -66,7 +72,7 @@ export default function ContactForm({
           </div>
 
           <ul className="contact-form__social">
-            {socialLinks.map((item) => (
+            {(socialLinks ?? []).map((item) => (
               <li key={item.id}>
                 <a
                   className="contact-form__social-link"
@@ -83,23 +89,36 @@ export default function ContactForm({
         </div>
 
         {status === 'success' ? (
-          <p className="contact-form__success" role="status">
-            Thanks for reaching out — we've received your message and will get back to you shortly.
-          </p>
+          <div className="contact-form__success-wrap">
+            <p className="contact-form__success" role="status">
+              Thanks for reaching out — we've received your message and will get back to you shortly.
+            </p>
+            <button
+              type="button"
+              className="contact-form__submit"
+              onClick={() => {
+                setStatus('idle')
+                setErrorMessage('')
+              }}
+              style={{ marginTop: '1.5rem', width: 'auto', display: 'inline-flex' }}
+            >
+              Send another message
+            </button>
+          </div>
         ) : (
           <form className="contact-form__form" onSubmit={handleSubmit}>
             <div className="contact-form__row">
               <div className="contact-form__field">
                 <label htmlFor="contact-name">Your Name</label>
-                <input id="contact-name" type="text" name="name" required />
+                <input id="contact-name" type="text" name="name" autoComplete="name" required />
               </div>
               <div className="contact-form__field">
                 <label htmlFor="contact-email">Email Address</label>
-                <input id="contact-email" type="email" name="email" required />
+                <input id="contact-email" type="email" name="email" autoComplete="email" required />
               </div>
               <div className="contact-form__field">
                 <label htmlFor="contact-phone">Phone Number (optional)</label>
-                <input id="contact-phone" type="tel" name="phone" />
+                <input id="contact-phone" type="tel" name="phone" autoComplete="tel" />
               </div>
             </div>
 

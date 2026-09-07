@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { mediaUrl } from '../lib/cms'
 import type { HowItWorksStep } from '../lib/cms'
+import stepFallback from '../assets/images/service2.jpg'
 
 const DEFAULT_ACTIVE = 1
 
@@ -10,8 +11,9 @@ interface HowItWorksProps {
 }
 
 export default function HowItWorks({ title, steps }: HowItWorksProps) {
+  const stepList = steps ?? []
   const [active, setActive] = useState(DEFAULT_ACTIVE)
-  const activeStep = steps[active] ?? steps[0]
+  const activeStep = stepList[active] ?? stepList[0]
 
   return (
     <section className="how-it-works">
@@ -19,7 +21,7 @@ export default function HowItWorks({ title, steps }: HowItWorksProps) {
         <h2 className="how-it-works__title">{title}</h2>
 
         <ul className="how-it-works__list">
-          {steps.slice(0, 2).map((step, index) => (
+          {stepList.slice(0, 2).map((step, index) => (
             <li
               className={
                 index === active
@@ -45,8 +47,8 @@ export default function HowItWorks({ title, steps }: HowItWorksProps) {
         {activeStep && (
           <img
             className="how-it-works__img"
-            src={mediaUrl(activeStep.image.url)}
-            alt={activeStep.alt}
+            src={activeStep.image?.url ? mediaUrl(activeStep.image.url) : stepFallback}
+            alt={activeStep.alt || activeStep.title}
             loading="lazy"
           />
         )}

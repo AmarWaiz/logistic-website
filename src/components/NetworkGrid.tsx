@@ -1,5 +1,6 @@
 import { mediaUrl } from '../lib/cms'
 import type { ImageCard } from '../lib/cms'
+import shipFallback from '../assets/images/ship.jpg'
 
 interface NetworkGridProps {
   title: string
@@ -8,6 +9,8 @@ interface NetworkGridProps {
 }
 
 export default function NetworkGrid({ title, subtitle, cards }: NetworkGridProps) {
+  const cardList = cards ?? []
+
   return (
     <section className="network-grid">
       <div className="network-grid__inner">
@@ -17,12 +20,12 @@ export default function NetworkGrid({ title, subtitle, cards }: NetworkGridProps
         </div>
 
         <ul className="network-grid__list">
-          {cards.map((card) => (
+          {cardList.map((card) => (
             <li className="network-grid__card" key={card.id}>
               <img
                 className="network-grid__img"
-                src={mediaUrl(card.image.url)}
-                alt={card.alt}
+                src={card.image?.url ? mediaUrl(card.image.url) : shipFallback}
+                alt={card.alt || card.title}
                 loading="lazy"
               />
               <div className="network-grid__body">

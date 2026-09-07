@@ -9,6 +9,7 @@ import Capabilities from '../components/Capabilities'
 import Faq from '../components/Faq'
 import Network from '../components/Network'
 import CmsUnavailable from '../components/CmsUnavailable'
+import { PageHeroSkeleton } from '../components/PageSkeleton'
 import { useCmsData } from '../hooks/useCmsData'
 import { useSeo } from '../hooks/useSeo'
 import { useGlobal } from '../lib/cms/GlobalContext'
@@ -20,7 +21,7 @@ export default function About() {
 
   useSeo(about?.seo, global?.defaultSeo, global?.siteName)
 
-  if (!about) return loading ? null : <CmsUnavailable />
+  if (!about) return loading ? <PageHeroSkeleton /> : <CmsUnavailable />
 
   return (
     <>

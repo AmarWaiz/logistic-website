@@ -3,6 +3,7 @@ import BlogGrid from '../components/BlogGrid'
 import BlogFaq from '../components/BlogFaq'
 import BlogCta from '../components/BlogCta'
 import CmsUnavailable from '../components/CmsUnavailable'
+import { PageHeroSkeleton } from '../components/PageSkeleton'
 import { useCmsData } from '../hooks/useCmsData'
 import { useSeo } from '../hooks/useSeo'
 import { useGlobal } from '../lib/cms/GlobalContext'
@@ -15,7 +16,7 @@ export default function BlogList() {
 
   useSeo(blogPage?.seo, global?.defaultSeo, global?.siteName)
 
-  if (!blogPage) return loading ? null : <CmsUnavailable />
+  if (!blogPage) return loading ? <PageHeroSkeleton /> : <CmsUnavailable />
 
   return (
     <>

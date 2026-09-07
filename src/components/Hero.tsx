@@ -129,6 +129,19 @@ export default function Hero({
       plane: new Image(),
       truck: new Image(),
     }
+
+    const setupImage = (img: HTMLImageElement, fallback: string) => {
+      img.onerror = () => {
+        if (img.src !== fallback) {
+          img.src = fallback
+        }
+      }
+    }
+    setupImage(images.bg, heroBgFallback)
+    setupImage(images.logo, heroWordmarkFallback)
+    setupImage(images.plane, heroPlaneFallback)
+    setupImage(images.truck, heroTruckFallback)
+
     images.bg.src = bgImage || heroBgFallback
     images.logo.src = wordmarkImage || heroWordmarkFallback
     images.plane.src = planeImage || heroPlaneFallback
@@ -202,7 +215,6 @@ export default function Hero({
     resizeObserver.observe(section)
 
     let gsapCtx: gsap.Context | null = null
-    let loadedCount = 0
     const imageList = Object.values(images)
 
     const start = () => {
@@ -359,10 +371,16 @@ export default function Hero({
       }, section)
     }
 
+    // Start GSAP and ScrollTrigger immediately on mount so the pin-spacer
+    // is established synchronously with ZERO post-load layout jump.
+    start()
+
+    // Paint images immediately if cached, or progressively as they load over the network.
     imageList.forEach((img) => {
-      img.onload = () => {
-        loadedCount += 1
-        if (loadedCount === imageList.length) start()
+      if (img.complete && img.naturalWidth > 0) {
+        draw()
+      } else {
+        img.onload = () => draw()
       }
     })
 
@@ -371,9 +389,10 @@ export default function Hero({
       gsapCtx?.revert()
       imageList.forEach((img) => {
         img.onload = null
+        img.onerror = null
       })
     }
-  }, [])
+  }, [bgImage, wordmarkImage, planeImage, truckImage])
 
   return (
     <section className="hero" id="hero" ref={sectionRef}>

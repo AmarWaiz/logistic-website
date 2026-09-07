@@ -1,40 +1,11 @@
 import { useCmsData } from '../hooks/useCmsData'
 import { useSeo } from '../hooks/useSeo'
 import { useGlobal } from '../lib/cms/GlobalContext'
+import { PageHeroSkeleton } from '../components/PageSkeleton'
 import { getBlogPostBySlug, getBlogPosts, mediaUrl } from '../lib/cms'
 import { splitParagraphs } from '../lib/multiline'
 import avatarFallback from '../assets/images/Avatar.png'
-
-const SHARE = [
-  {
-    label: 'Share on Facebook',
-    path: (
-      <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.29-.04-1.27-.12-2.4-.12-2.4 0-4 1.45-4 4.13V9.9H7.6V13h2.7v8h3.2Z" />
-    ),
-  },
-  {
-    label: 'Share on X',
-    path: (
-      <path
-        d="M4 4l16 16M20 4 4 20"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        fill="none"
-      />
-    ),
-  },
-  {
-    label: 'Share on LinkedIn',
-    path: (
-      <>
-        <rect x="3" y="9" width="4" height="12" />
-        <circle cx="5" cy="4.5" r="2.2" />
-        <path d="M10.5 9H14v1.9c.7-1.2 2-2.2 3.8-2.2 3 0 4.2 1.9 4.2 5.1V21h-4v-6.4c0-1.5-.6-2.6-2-2.6-1.1 0-1.7.75-2 1.5-.1.25-.1.6-.1.95V21h-4V9Z" />
-      </>
-    ),
-  },
-]
+import heroFallback from '../assets/images/aboutbg.webp'
 
 export default function BlogPost({ slug }: { slug: string }) {
   const { data: global } = useGlobal()
@@ -43,7 +14,7 @@ export default function BlogPost({ slug }: { slug: string }) {
 
   useSeo(post?.seo, global?.defaultSeo, global?.siteName)
 
-  if (loading) return null
+  if (loading) return <PageHeroSkeleton />
 
   if (!post) {
     return (
@@ -70,13 +41,52 @@ export default function BlogPost({ slug }: { slug: string }) {
   const others = rest.filter((p) => p.category !== post.category)
   const related = [...sameCategory, ...others].slice(0, 3)
 
-  const authorAvatar = post.author?.avatar ? mediaUrl(post.author.avatar.url) : avatarFallback
+  const authorAvatar = post.author?.avatar?.url ? mediaUrl(post.author.avatar.url) : avatarFallback
+  const heroImage = post.image?.url ? mediaUrl(post.image.url) : heroFallback
+
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const encodedUrl = encodeURIComponent(currentUrl)
+  const encodedTitle = encodeURIComponent(post.title || '')
+
+  const shareLinks = [
+    {
+      label: 'Share on Facebook',
+      href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+      path: (
+        <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.29-.04-1.27-.12-2.4-.12-2.4 0-4 1.45-4 4.13V9.9H7.6V13h2.7v8h3.2Z" />
+      ),
+    },
+    {
+      label: 'Share on X',
+      href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+      path: (
+        <path
+          d="M4 4l16 16M20 4 4 20"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          fill="none"
+        />
+      ),
+    },
+    {
+      label: 'Share on LinkedIn',
+      href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+      path: (
+        <>
+          <rect x="3" y="9" width="4" height="12" />
+          <circle cx="5" cy="4.5" r="2.2" />
+          <path d="M10.5 9H14v1.9c.7-1.2 2-2.2 3.8-2.2 3 0 4.2 1.9 4.2 5.1V21h-4v-6.4c0-1.5-.6-2.6-2-2.6-1.1 0-1.7.75-2 1.5-.1.25-.1.6-.1.95V21h-4V9Z" />
+        </>
+      ),
+    },
+  ]
 
   return (
     <section className="blog-post">
       <div
         className="blog-post__hero"
-        style={{ backgroundImage: `url(${mediaUrl(post.image.url)})` }}
+        style={{ backgroundImage: `url(${heroImage})` }}
       >
         <div className="blog-post__hero-overlay" />
         <div className="blog-post__hero-inner">
@@ -96,7 +106,7 @@ export default function BlogPost({ slug }: { slug: string }) {
             <div>
               <p className="blog-post__byline-name">{post.author?.name ?? 'ardle'}</p>
               <p className="blog-post__meta">
-                {new Date(post.date).toLocaleDateString('en-US', {
+                {new Date(post.date || Date.now()).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -112,12 +122,12 @@ export default function BlogPost({ slug }: { slug: string }) {
         <div className="blog-post__layout">
           <div className="blog-post__body">
             <p className="blog-post__lead">{post.excerpt}</p>
-            {splitParagraphs(post.body).map((paragraph, index) => (
+            {splitParagraphs(post.body || '').map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
 
             <ul className="blog-post__tags">
-              {post.tags.map((tag) => (
+              {(post.tags ?? []).map((tag) => (
                 <li key={tag.id} className="blog-post__tag">
                   {tag.label}
                 </li>
@@ -129,11 +139,13 @@ export default function BlogPost({ slug }: { slug: string }) {
             <div className="blog-post__share">
               <span className="blog-post__share-label">Share</span>
               <ul className="blog-post__share-list">
-                {SHARE.map((item) => (
+                {shareLinks.map((item) => (
                   <li key={item.label}>
                     <a
                       className="blog-post__share-link"
-                      href="#"
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       aria-label={item.label}
                     >
                       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -170,8 +182,8 @@ export default function BlogPost({ slug }: { slug: string }) {
                 <li className="blog__card" key={item.slug}>
                   <img
                     className="blog__img"
-                    src={mediaUrl(item.image.url)}
-                    alt={item.alt}
+                    src={item.image?.url ? mediaUrl(item.image.url) : heroFallback}
+                    alt={item.alt || item.title}
                     loading="lazy"
                   />
                   <a

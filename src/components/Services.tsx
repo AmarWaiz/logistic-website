@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { mediaUrl } from '../lib/cms'
 import type { ServiceDetail } from '../lib/cms'
+import serviceFallback from '../assets/images/service2.jpg'
 
 /* The section pins and swaps on scroll at every width; App.css
    handles how the panel lays out on narrow screens. */
@@ -13,11 +14,12 @@ interface ServicesProps {
 }
 
 export default function Services({ title, subtitle, items }: ServicesProps) {
-  const SERVICES = items.map((item) => ({
+  const serviceItems = items ?? []
+  const SERVICES = serviceItems.map((item) => ({
     num: item.number,
     title: item.title,
-    body: item.body.split('\n\n'),
-    image: mediaUrl(item.image.url),
+    body: (item.body || '').split('\n\n'),
+    image: item.image?.url ? mediaUrl(item.image.url) : serviceFallback,
   }))
 
   const trackRef = useRef<HTMLDivElement>(null)

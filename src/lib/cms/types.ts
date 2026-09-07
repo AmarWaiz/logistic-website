@@ -127,6 +127,7 @@ export interface PageHero {
   text: string
   ctaText: string
   ctaLink: string
+  backgroundImage?: Media | null
 }
 
 export interface DistributionCard {

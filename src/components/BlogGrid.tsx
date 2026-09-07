@@ -1,5 +1,6 @@
 import { mediaUrl } from '../lib/cms'
 import type { BlogPost } from '../lib/cms'
+import blogFallback from '../assets/images/aboutbg.webp'
 
 interface BlogGridProps {
   title: string
@@ -8,6 +9,8 @@ interface BlogGridProps {
 }
 
 export default function BlogGrid({ title, subtitle, posts }: BlogGridProps) {
+  const postList = posts ?? []
+
   return (
     <section className="blog" id="blog-grid">
       <div className="blog__inner">
@@ -15,12 +18,12 @@ export default function BlogGrid({ title, subtitle, posts }: BlogGridProps) {
         <p className="blog__subtitle">{subtitle}</p>
 
         <ul className="blog__grid">
-          {posts.map((post) => (
+          {postList.map((post) => (
             <li className="blog__card" key={post.id}>
               <img
                 className="blog__img"
-                src={mediaUrl(post.image.url)}
-                alt={post.alt}
+                src={post.image?.url ? mediaUrl(post.image.url) : blogFallback}
+                alt={post.alt || post.title}
                 loading="lazy"
               />
 

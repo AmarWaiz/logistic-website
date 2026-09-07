@@ -1,5 +1,6 @@
 import { mediaUrl } from '../lib/cms'
 import type { BlogPost } from '../lib/cms'
+import blogFallback from '../assets/images/aboutbg.webp'
 
 interface BlogProps {
   title: string
@@ -8,7 +9,7 @@ interface BlogProps {
 }
 
 export default function Blog({ title, subtitle, posts }: BlogProps) {
-  const featured = posts.slice(0, 3)
+  const featured = (posts ?? []).slice(0, 3)
 
   return (
     <section className="blog" id="blog">
@@ -21,8 +22,8 @@ export default function Blog({ title, subtitle, posts }: BlogProps) {
             <li className="blog__card" key={post.id}>
               <img
                 className="blog__img"
-                src={mediaUrl(post.image.url)}
-                alt={post.alt}
+                src={post.image?.url ? mediaUrl(post.image.url) : blogFallback}
+                alt={post.alt || post.title}
                 loading="lazy"
               />
 

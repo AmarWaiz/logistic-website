@@ -10,6 +10,7 @@ import Blog from '../components/Blog'
 import Faq from '../components/Faq'
 import Promo from '../components/Promo'
 import CmsUnavailable from '../components/CmsUnavailable'
+import { HeroSkeleton } from '../components/PageSkeleton'
 import { useCmsData } from '../hooks/useCmsData'
 import { useSeo } from '../hooks/useSeo'
 import { useGlobal } from '../lib/cms/GlobalContext'
@@ -23,7 +24,7 @@ export default function Home() {
 
   useSeo(home?.seo, global?.defaultSeo, global?.siteName)
 
-  if (!home) return loading ? null : <CmsUnavailable />
+  if (!home) return loading ? <HeroSkeleton /> : <CmsUnavailable />
 
   return (
     <>

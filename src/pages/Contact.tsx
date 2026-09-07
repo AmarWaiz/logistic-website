@@ -1,6 +1,7 @@
 import ContactHero from '../components/ContactHero'
 import ContactForm from '../components/ContactForm'
 import CmsUnavailable from '../components/CmsUnavailable'
+import { PageHeroSkeleton } from '../components/PageSkeleton'
 import { useCmsData } from '../hooks/useCmsData'
 import { useSeo } from '../hooks/useSeo'
 import { useGlobal } from '../lib/cms/GlobalContext'
@@ -12,7 +13,7 @@ export default function Contact() {
 
   useSeo(contact?.seo, global?.defaultSeo, global?.siteName)
 
-  if (!contact) return loading ? null : <CmsUnavailable />
+  if (!contact) return loading ? <PageHeroSkeleton variant="contact" /> : <CmsUnavailable />
 
   return (
     <>

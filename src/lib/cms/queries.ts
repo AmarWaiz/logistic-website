@@ -41,9 +41,11 @@ export const getHomePage = () =>
     ...SEO_POPULATE,
   })
 
+const PAGE_HERO_POPULATE = { hero: { populate: { backgroundImage: true } } }
+
 export const getAboutPage = () =>
   fetchOne<AboutPage>('about-page', {
-    hero: true,
+    ...PAGE_HERO_POPULATE,
     brandLogos: { populate: { image: true } },
     seamlessTiles: { populate: { image: true } },
     roadBannerImage: true,
@@ -60,13 +62,13 @@ export const getAboutPage = () =>
 
 export const getContactPage = () =>
   fetchOne<ContactPage>('contact-page', {
-    hero: true,
+    ...PAGE_HERO_POPULATE,
     ...SEO_POPULATE,
   })
 
 export const getServicesPage = () =>
   fetchOne<ServicesPage>('services-page', {
-    hero: true,
+    ...PAGE_HERO_POPULATE,
     distributionCards: true,
     networkGridCards: { populate: { image: true } },
     faq: { populate: { items: true } },
@@ -76,7 +78,7 @@ export const getServicesPage = () =>
 
 export const getWarehousingPage = () =>
   fetchOne<WarehousingPage>('warehousing-page', {
-    hero: true,
+    ...PAGE_HERO_POPULATE,
     capabilitiesCards: true,
     howItWorksSteps: { populate: { image: true } },
     industryFitImage: true,
@@ -88,7 +90,7 @@ export const getWarehousingPage = () =>
 
 export const getBlogPage = () =>
   fetchOne<BlogPage>('blog-page', {
-    hero: true,
+    ...PAGE_HERO_POPULATE,
     faq: { populate: { items: true } },
     cta: true,
     ...SEO_POPULATE,

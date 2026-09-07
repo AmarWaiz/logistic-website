@@ -5,6 +5,7 @@ import NetworkGrid from '../components/NetworkGrid'
 import ServicesFaq from '../components/ServicesFaq'
 import ServicesCta from '../components/ServicesCta'
 import CmsUnavailable from '../components/CmsUnavailable'
+import { PageHeroSkeleton } from '../components/PageSkeleton'
 import { useCmsData } from '../hooks/useCmsData'
 import { useSeo } from '../hooks/useSeo'
 import { useGlobal } from '../lib/cms/GlobalContext'
@@ -16,7 +17,7 @@ export default function Services() {
 
   useSeo(services?.seo, global?.defaultSeo, global?.siteName)
 
-  if (!services) return loading ? null : <CmsUnavailable />
+  if (!services) return loading ? <PageHeroSkeleton variant="services" /> : <CmsUnavailable />
 
   return (
     <>

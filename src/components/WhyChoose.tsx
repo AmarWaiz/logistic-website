@@ -1,5 +1,6 @@
 import { mediaUrl } from '../lib/cms'
 import type { ImageCard } from '../lib/cms'
+import serviceFallback from '../assets/images/service2.jpg'
 
 interface WhyChooseProps {
   title: string
@@ -8,6 +9,8 @@ interface WhyChooseProps {
 }
 
 export default function WhyChoose({ title, subtitle, cards }: WhyChooseProps) {
+  const cardList = cards ?? []
+
   return (
     <section className="why-choose">
       <div className="why-choose__inner">
@@ -17,12 +20,12 @@ export default function WhyChoose({ title, subtitle, cards }: WhyChooseProps) {
             <p className="why-choose__subtitle">{subtitle}</p>
           </div>
 
-          {cards.map((card) => (
+          {cardList.map((card) => (
             <article className="why-choose__card" key={card.id}>
               <img
                 className="why-choose__img"
-                src={mediaUrl(card.image.url)}
-                alt={card.alt}
+                src={card.image?.url ? mediaUrl(card.image.url) : serviceFallback}
+                alt={card.alt || card.title}
                 loading="lazy"
               />
               <div className="why-choose__scrim" />
